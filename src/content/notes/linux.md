@@ -1,6 +1,7 @@
 ---
 title: Linux
-tags: [Linux, 命令行, 文件系统, 操作系统, 后端]
+category: 后端
+tags: [Linux]
 pubDate: 2026-06-17
 description: Linux文件系统、目录结构与常用命令速查笔记
 source: linux.md

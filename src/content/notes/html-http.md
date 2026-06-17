@@ -1,6 +1,7 @@
 ---
 title: HTML和HTTP
-tags: [HTML, HTTP, 前端, 网络]
+category: 前端
+tags: [HTML, HTTP]
 pubDate: 2026-06-17
 description: HTML元标签、HTTP缓存/跨域/Cookie及HTTPS/TLS握手原理笔记
 source: HTML和HTTP.md

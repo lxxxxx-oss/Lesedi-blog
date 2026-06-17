@@ -1,6 +1,7 @@
 ---
 title: 零零碎碎
-tags: [前端, 编程基础, 知识点, 杂项]
+category: 前端
+tags: [JavaScript, ES Module]
 pubDate: 2026-06-17
 description: JavaScript模块化规范（CommonJS与ES Module）以及Promise异步编程基础笔记
 source: 零零碎碎.md

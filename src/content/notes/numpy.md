@@ -1,6 +1,7 @@
 ---
 title: NumPy 基础
-tags: [Python, NumPy, 科学计算]
+category: Python
+tags: [NumPy]
 pubDate: 2026-06-17
 description: NumPy科学计算库的基本概念、核心优势及使用场景介绍
 source: Numpy.md

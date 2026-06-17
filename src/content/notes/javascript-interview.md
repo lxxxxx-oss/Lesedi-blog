@@ -1,6 +1,7 @@
 ---
 title: JavaScript 面试题集锦
-tags: [面试, JavaScript, 前端, 数据类型, 原型链]
+category: 面试
+tags: [JavaScript]
 pubDate: 2026-06-17
 description: JavaScript 数据类型、闭包、原型链、事件循环、执行上下文、深拷贝等23个核心面试题详解。
 source: JavaScript.md

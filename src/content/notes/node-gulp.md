@@ -1,6 +1,7 @@
 ---
 title: Node与Gulp
-tags: [Node.js, Gulp, 前端工程化, 工具]
+category: 后端
+tags: [Node.js, Gulp]
 pubDate: 2026-06-17
 description: Node.js运行环境、模块化开发与Gulp构建工具入门笔记
 source: Node与Gulp.md

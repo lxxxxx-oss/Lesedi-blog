@@ -1,6 +1,7 @@
 ---
 title: CSS
-tags: [CSS, 前端, 编程基础]
+category: 前端
+tags: [CSS]
 pubDate: 2026-06-17
 description: CSS选择器、Flex布局与Box-sizing等核心样式知识笔记
 source: CSS.md

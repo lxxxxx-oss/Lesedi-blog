@@ -1,6 +1,7 @@
 ---
 title: 小程序简介
-tags: [微信小程序, 前端, 小程序]
+category: 前端
+tags: [微信小程序]
 pubDate: 2026-06-17
 description: 微信小程序开发全览：项目结构、WXML/WXSS模板、组件、API、导航与生命周期
 source: 微信小程序.md

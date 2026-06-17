@@ -1,6 +1,7 @@
 ---
 title: WebSocket
-tags: [WebSocket, 前端, 网络, Node.js]
+category: 前端
+tags: [WebSocket]
 pubDate: 2026-06-17
 description: WebSocket全双工通信原理、API使用及Node.js聊天室实战笔记
 source: WebSocket.md

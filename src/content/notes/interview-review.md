@@ -1,6 +1,7 @@
 ---
 title: 面试复盘与问答集锦
-tags: [面试, 前端, Vue, JavaScript, 复盘]
+category: 面试
+tags: [复盘]
 pubDate: 2026-06-17
 description: 多家公司前端开发岗位面试复盘，涵盖事件循环、双向绑定、缓存策略、Git工作流、原型链等核心问答。
 source: 面试复盘.md

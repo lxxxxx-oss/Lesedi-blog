@@ -1,6 +1,7 @@
 ---
 title: ES6核心特性
-tags: [JavaScript, ES6, 前端]
+category: 前端
+tags: [JavaScript, ES6]
 pubDate: 2026-06-17
 description: ES6 let/const命令、块级作用域、Promise异步编程入门笔记
 source: ECMAscript6.md

@@ -1,6 +1,7 @@
 ---
 title: Express
-tags: [Express, Node.js, 后端]
+category: 后端
+tags: [Express]
 pubDate: 2026-06-17
 description: Express快速入门笔记，涵盖路由基础、中间件机制、请求与响应处理等核心概念。
 source: express.md

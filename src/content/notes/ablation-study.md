@@ -1,6 +1,7 @@
 ---
 title: 消融实验
-tags: [深度学习, 消融实验, 研究生, 机器学习]
+category: 深度学习
+tags: [消融实验]
 pubDate: 2026-06-17
 description: 消融实验的设计思路、步骤规范和需要关注的评估指标
 source: 消融实验.md

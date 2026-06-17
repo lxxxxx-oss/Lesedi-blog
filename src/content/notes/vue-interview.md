@@ -1,6 +1,7 @@
 ---
 title: Vue 面试题集锦
-tags: [面试, Vue, 前端, 响应式, 组件通信]
+category: 前端
+tags: [Vue]
 pubDate: 2026-06-17
 description: Vue 虚拟DOM、双向绑定、生命周期、组件通信、插槽、v-if/v-show、SPA等11个核心面试题详解。
 source: Vue.md

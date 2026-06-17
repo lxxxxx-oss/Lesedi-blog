@@ -1,6 +1,7 @@
 ---
 title: PyTorch 基础
-tags: [Python, PyTorch, 深度学习, 机器学习]
+category: Python
+tags: [PyTorch]
 pubDate: 2026-06-17
 description: PyTorch核心概念与实践，涵盖环境配置、数据预处理、TensorBoard可视化与Transforms
 source: Pytorch.md

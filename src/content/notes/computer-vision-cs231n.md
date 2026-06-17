@@ -1,6 +1,7 @@
 ---
 title: 计算机视觉 — CS231n 笔记
-tags: [计算机视觉, CS231n, 深度学习, 图像分类]
+category: 深度学习
+tags: [计算机视觉]
 pubDate: 2026-06-17
 description: 斯坦福CS231n课程笔记，涵盖KNN、线性分类器等图像分类核心算法
 source: 计算机视觉-CS231n.md

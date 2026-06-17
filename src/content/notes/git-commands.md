@@ -1,6 +1,7 @@
 ---
 title: Git 命令速查
-tags: [Git, 工具, 版本控制]
+category: 工具
+tags: [Git]
 pubDate: 2026-06-17
 description: Git常用命令速查，涵盖分支合并、撤销回退、高级合并技巧等实用操作
 source: git命令.md

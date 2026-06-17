@@ -1,6 +1,7 @@
 ---
 title: Agent 开发面试题集锦
-tags: [面试, Agent, AI, RAG, 大模型]
+category: Agent / AI
+tags: [Agent, RAG]
 pubDate: 2026-06-17
 description: 字节、携程、快手、滴滴、蚂蚁、美团等公司 Agent 开发岗位面试题汇总，涵盖 RAG、MCP、记忆机制、工具调用等。
 source: Agent面经.md

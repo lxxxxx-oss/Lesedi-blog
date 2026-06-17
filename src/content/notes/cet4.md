@@ -1,6 +1,7 @@
 ---
 title: 英语四级
-tags: [英语, 学习, CET-4]
+category: 英语
+tags: [CET-4]
 pubDate: 2026-06-17
 description: 英语四级作文模板，包含开头引入观点和结尾总结的常用句式。
 source: 英语四级.md

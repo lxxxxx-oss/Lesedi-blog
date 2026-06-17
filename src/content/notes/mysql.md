@@ -1,6 +1,7 @@
 ---
 title: MySQL 概述
-tags: [MySQL, SQL, 数据库, 后端]
+category: 后端
+tags: [MySQL]
 pubDate: 2026-06-17
 description: MySQL关系型数据库基础：DDL、DML语法与数据类型速查
 source: mysql.md

@@ -1,6 +1,7 @@
 ---
 title: 一些零碎但重要的知识点
-tags: [前端, JavaScript, CSS, Vue, 浏览器, 正则表达式]
+category: 前端
+tags: [JavaScript, CSS, 正则]
 pubDate: 2026-06-17
 description: 前端核心知识点集锦：ES6、BFC、Vue生命周期、重绘回流、闭包、防抖节流、正则等
 source: 一些零碎但重要的知识点.md

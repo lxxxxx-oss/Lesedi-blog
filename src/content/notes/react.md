@@ -1,6 +1,7 @@
 ---
 title: React 入门
-tags: [React, 前端, JavaScript, Hooks]
+category: 前端
+tags: [React, Hooks]
 pubDate: 2026-06-17
 description: React核心概念与实践，涵盖JSX、Hooks、组件通信、Redux和React Router
 source: React.md

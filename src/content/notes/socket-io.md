@@ -1,6 +1,7 @@
 ---
 title: Socket.IO
-tags: [Socket.IO, WebSocket, 前端, Node.js]
+category: 前端
+tags: [Socket.IO]
 pubDate: 2026-06-17
 description: Socket.IO实时双向通信库的特性与基本介绍
 source: Socket.IO.md

@@ -1,6 +1,7 @@
 ---
 title: Vue3笔记
-tags: [Vue, Vue3, 前端]
+category: 前端
+tags: [Vue, Vue3]
 pubDate: 2026-06-17
 description: Vue3组合式API、响应式基础、组件通信与生命周期全面笔记
 source: Vue3.md

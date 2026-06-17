@@ -1,6 +1,7 @@
 ---
 title: TypeScript
-tags: [TypeScript, JavaScript, 前端, 编程基础]
+category: 前端
+tags: [TypeScript]
 pubDate: 2026-06-17
 description: TypeScript类型系统、接口、泛型、类与枚举等核心特性全面笔记
 source: TypeScript.md

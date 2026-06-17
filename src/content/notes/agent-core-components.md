@@ -1,6 +1,7 @@
 ---
 title: Agent 核心组成
-tags: [Agent, AI, LLM, 智能体]
+category: Agent / AI
+tags: [Agent, LLM]
 pubDate: 2026-06-17
 description: 深入解析AI Agent的核心模块架构，包括必需模块、可选插件与记忆系统设计
 source: agent核心组成.md

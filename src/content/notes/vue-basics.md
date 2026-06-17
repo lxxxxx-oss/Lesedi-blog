@@ -1,6 +1,7 @@
 ---
 title: Vue基础
-tags: [Vue, 前端, 编程基础]
+category: 前端
+tags: [Vue]
 pubDate: 2026-06-17
 description: Vue2基础语法、组件化开发、路由、Vuex状态管理与axios网络请求笔记
 source: Vue基础.md

@@ -1,6 +1,7 @@
 ---
 title: JavaScript基础
-tags: [JavaScript, 编程基础, 前端]
+category: 前端
+tags: [JavaScript]
 pubDate: 2026-06-17
 description: JavaScript基础语法、数据类型、原型链与数组操作入门笔记
 source: JavaScript基础.md

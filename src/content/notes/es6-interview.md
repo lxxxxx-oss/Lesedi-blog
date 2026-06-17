@@ -1,6 +1,7 @@
 ---
 title: ES6 var let const 区别
-tags: [面试, JavaScript, ES6]
+category: 前端
+tags: [JavaScript, ES6]
 pubDate: 2026-06-17
 description: ES6 中 var、let、const 三种变量声明方式在作用域、变量提升和赋值限制上的核心区别。
 source: ES6.md

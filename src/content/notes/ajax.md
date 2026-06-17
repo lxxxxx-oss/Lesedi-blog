@@ -1,6 +1,7 @@
 ---
 title: Ajax
-tags: [Ajax, JavaScript, 前端, 网络]
+category: 前端
+tags: [Ajax]
 pubDate: 2026-06-17
 description: 原生Ajax异步请求、HTTP报文结构与同源跨域策略基础笔记
 source: Ajax.md

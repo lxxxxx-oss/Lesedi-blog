@@ -1,6 +1,7 @@
 ---
 title: 计算机网络面试题集锦
-tags: [面试, 网络, HTTP, TCP, DNS]
+category: 网络
+tags: [HTTP, TCP, DNS]
 pubDate: 2026-06-17
 description: HTTP/HTTPS、TCP/UDP、OSI七层模型、DNS查询、HTTP状态码及Axios封装等网络相关面试题。
 source: 网络相关.md

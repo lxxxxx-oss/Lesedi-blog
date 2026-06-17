@@ -1,6 +1,7 @@
 ---
 title: Node.js
-tags: [Node.js, JavaScript, 后端, fs, http, path]
+category: 后端
+tags: [Node.js]
 pubDate: 2026-06-17
 description: Node.js运行时基础：fs文件系统、path路径与http网络模块入门
 source: nodejs.md

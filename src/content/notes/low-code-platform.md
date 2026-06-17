@@ -1,6 +1,7 @@
 ---
 title: 低代码平台设计与实现
-tags: [面试, 低代码, Vue3, Pinia, 前端]
+category: 前端
+tags: [Vue, 低代码]
 pubDate: 2026-06-17
 description: 低代码可视化设计平台中 JSON Schema 数据结构、Pinia 状态流转、拖拽嵌套优化、撤销重做及源码生成等核心设计。
 source: 低代码平台.md

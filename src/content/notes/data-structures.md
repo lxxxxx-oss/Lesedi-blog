@@ -1,6 +1,7 @@
 ---
 title: 数据结构
-tags: [数据结构, 编程基础]
+category: 编程基础
+tags: [数据结构]
 pubDate: 2026-06-17
 description: 数据结构学习笔记（待补充）
 source: 数据结构.md

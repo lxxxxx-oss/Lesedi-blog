@@ -1,6 +1,7 @@
 ---
 title: CSS 面试题集锦
-tags: [面试, CSS, 前端, 布局]
+category: 前端
+tags: [CSS]
 pubDate: 2026-06-17
 description: CSS 盒模型、选择器、单位、BFC、Flexbox、Grid、居中方案等经典面试题详解。
 source: CSS.md
