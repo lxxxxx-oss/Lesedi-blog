@@ -226,3 +226,24 @@ const pageTitle = '笔记';
 		</script>
 	</body>
 </html>
+
+<style>
+	@media (max-width: 720px) {
+		.notes-page { padding: 2em 0.75em; }
+		.notes-header h1 { font-size: 1.8em; }
+		.cat-filter-btn { padding: 0.3em 0.7em; font-size: 0.8em; }
+		.sub-tags { padding: 0.5em; gap: 0.3rem; }
+		.sub-tag-btn { font-size: 0.72em; padding: 0.12em 0.5em; }
+		.notes-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+	}
+	@media (max-width: 480px) {
+		.notes-page { padding: 1.5em 0.5em; }
+		.notes-header h1 { font-size: 1.4em; }
+		.notes-header p { font-size: 0.9em; }
+		.cat-filters { gap: 0.3rem; }
+		.cat-filter-btn { padding: 0.25em 0.6em; font-size: 0.75em; border-radius: 6px; }
+		.sub-tags { padding: 0.4em; }
+		.sub-tag-btn { font-size: 0.68em; }
+		.notes-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+	}
+</style>

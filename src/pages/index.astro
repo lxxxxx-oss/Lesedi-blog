@@ -12,7 +12,6 @@ const notes = (await getCollection('notes')).sort(
 
 const latestNotes = notes.slice(0, 5);
 
-// Collect categories
 const catMap = new Map<string, number>();
 for (const note of notes) {
 	const cat = note.data.category;
@@ -52,6 +51,7 @@ const categories = [...catMap.entries()]
 				display: flex;
 				justify-content: center;
 				gap: 1rem;
+				flex-wrap: wrap;
 			}
 			.hero-links a {
 				padding: 0.5em 1.5em;
@@ -71,6 +71,28 @@ const categories = [...catMap.entries()]
 			}
 			.hero-links a.secondary:hover {
 				background: rgb(var(--gray));
+				color: white;
+			}
+			.cat-links {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 0.75rem;
+				max-width: 640px;
+				margin: 0 auto 2rem;
+			}
+			.cat-links a {
+				padding: 0.5em 1.2em;
+				background: rgb(var(--gray-light));
+				color: rgb(var(--gray-dark));
+				border-radius: 8px;
+				text-decoration: none;
+				font-weight: 500;
+				font-size: 0.9em;
+				transition: all 0.2s;
+			}
+			.cat-links a:hover {
+				background: var(--accent);
 				color: white;
 			}
 			.section-title {
@@ -113,6 +135,27 @@ const categories = [...catMap.entries()]
 				color: rgb(var(--gray));
 				margin-top: 0.15rem;
 			}
+
+			@media (max-width: 720px) {
+				.home-page { padding: 2em 0.75em; }
+				.hero { margin-bottom: 2rem; }
+				.hero h1 { font-size: 1.8em; }
+				.hero p { font-size: 1em; }
+				.hero-links { gap: 0.5rem; }
+				.hero-links a { padding: 0.4em 1em; font-size: 0.9em; }
+				.cat-links { gap: 0.4rem; }
+				.cat-links a { padding: 0.35em 0.8em; font-size: 0.8em; }
+				.section-title h2 { font-size: 1.3em; }
+			}
+			@media (max-width: 480px) {
+				.home-page { padding: 1.5em 0.5em; }
+				.hero h1 { font-size: 1.4em; }
+				.hero p { font-size: 0.9em; margin-bottom: 0; }
+				.hero-links a { padding: 0.35em 0.8em; font-size: 0.85em; }
+				.section-title { margin: 1.5rem 0 1rem; }
+				.section-title h2 { font-size: 1.15em; }
+				.latest-list a { font-size: 0.95em; }
+			}
 		</style>
 	</head>
 	<body>
@@ -130,20 +173,10 @@ const categories = [...catMap.entries()]
 			<div class="section-title">
 				<h2>分类浏览</h2>
 			</div>
-			<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:0.75rem;max-width:640px;margin:0 auto 2rem;">
+			<div class="cat-links">
 				{categories.map((cat) => (
-					<a href={`/notes?category=${encodeURIComponent(cat.name)}`} style="
-						padding: 0.5em 1.2em;
-						background: rgb(var(--gray-light));
-						color: rgb(var(--gray-dark));
-						border-radius: 8px;
-						text-decoration: none;
-						font-weight: 500;
-						font-size: 0.9em;
-						transition: all 0.2s;
-					">
-						{cat.name}
-						<span style="font-size:0.7em;color:rgb(var(--gray));margin-left:0.3em;">{cat.count}</span>
+					<a href={`/notes?category=${encodeURIComponent(cat.name)}`}>
+						{cat.name} <span style="font-size:0.7em;opacity:0.7;margin-left:0.3em;">{cat.count}</span>
 					</a>
 				))}
 			</div>

@@ -142,3 +142,20 @@ const categories = [...catMap.entries()].map(([name, data]) => ({
 		<Footer />
 	</body>
 </html>
+
+<style>
+	@media (max-width: 720px) {
+		.tags-page { padding: 2em 0.75em; }
+		.tags-header h1 { font-size: 1.8em; }
+		.cat-section h2 { font-size: 1.15em; }
+	}
+	@media (max-width: 480px) {
+		.tags-page { padding: 1.5em 0.5em; }
+		.tags-header h1 { font-size: 1.4em; }
+		.tags-header p { font-size: 0.9em; }
+		.cat-section { margin-bottom: 2rem; }
+		.cat-section h2 { font-size: 1.05em; }
+		.tag-group h3 { font-size: 0.9em; }
+		.tag-notes a { font-size: 0.82em; }
+	}
+</style>

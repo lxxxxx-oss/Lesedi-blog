@@ -119,3 +119,15 @@ const { title, description, pubDate, category, tags, headings } = Astro.props;
 		<Footer />
 	</body>
 </html>
+
+<style>
+	@media (max-width: 720px) {
+		.note-layout { padding: 2em 0.75em; gap: 0; }
+	}
+	@media (max-width: 480px) {
+		.note-layout { padding: 1.5em 0.5em; }
+		.note-header h1 { font-size: 1.5em; }
+		.note-meta { font-size: 0.8em; }
+		.note-tags a { font-size: 0.72em; padding: 0.12em 0.5em; }
+	}
+</style>

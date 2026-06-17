@@ -13,8 +13,8 @@ import HeaderLink from './HeaderLink.astro';
 			<HeaderLink href="/about">About</HeaderLink>
 		</div>
 		<div class="social-links">
-			<a href="https://github.com/withastro/astro" target="_blank">
-				<span class="sr-only">Go to Astro's GitHub repo</span>
+			<a href="https://github.com/lxxxxx-oss" target="_blank">
+				<span class="sr-only">GitHub</span>
 				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
 					><path
 						fill="currentColor"
@@ -36,7 +36,6 @@ import HeaderLink from './HeaderLink.astro';
 		margin: 0;
 		font-size: 1em;
 	}
-
 	h2 a,
 	h2 a.active {
 		text-decoration: none;
@@ -60,9 +59,16 @@ import HeaderLink from './HeaderLink.astro';
 	.social-links a {
 		display: flex;
 	}
+
 	@media (max-width: 720px) {
-		.social-links {
-			display: none;
-		}
+		.social-links { display: none; }
+		nav { flex-wrap: wrap; }
+		nav a { padding: 0.5em 0.35em; font-size: 0.85em; }
+	}
+	@media (max-width: 480px) {
+		header { padding: 0 0.5em; }
+		h2 { width: 100%; text-align: center; margin-bottom: 0.25em; font-size: 0.9em; }
+		.internal-links { width: 100%; justify-content: center; display: flex; }
+		nav a { padding: 0.4em 0.25em; font-size: 0.75em; }
 	}
 </style>

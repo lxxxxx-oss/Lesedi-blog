@@ -46,17 +46,13 @@ const { title, description, pubDate, category, tags } = note.data;
 		border-radius: 4px;
 		margin-bottom: 0.5rem;
 	}
-	.card-link {
-		text-decoration: none;
-	}
+	.card-link { text-decoration: none; }
 	.title {
 		margin: 0;
 		font-size: 1.25em;
 		color: rgb(var(--black));
 	}
-	.card-link:hover .title {
-		color: var(--accent);
-	}
+	.card-link:hover .title { color: var(--accent); }
 	.date {
 		margin: 0.25rem 0 0.5rem;
 		font-size: 0.85em;
@@ -86,5 +82,11 @@ const { title, description, pubDate, category, tags } = note.data;
 	.tag:hover {
 		background: var(--accent);
 		color: white;
+	}
+
+	@media (max-width: 480px) {
+		.note-card { padding: 1rem; }
+		.title { font-size: 1.1em; }
+		.desc { font-size: 0.85em; }
 	}
 </style>
