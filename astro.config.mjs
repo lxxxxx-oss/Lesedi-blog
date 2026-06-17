@@ -7,7 +7,7 @@ import { defineConfig, fontProviders } from 'astro/config';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://lxxxxx-oss.github.io',
-	base: '/former-force/',
+	base: '/Lesedi-blog/',
 	integrations: [mdx(), sitemap()],
 	fonts: [
 		{
