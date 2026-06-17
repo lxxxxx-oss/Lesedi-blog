@@ -4,7 +4,6 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import FormattedDate from '../components/FormattedDate.astro';
-import TagCloud from '../components/TagCloud.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 const notes = (await getCollection('notes')).sort(
@@ -13,13 +12,13 @@ const notes = (await getCollection('notes')).sort(
 
 const latestNotes = notes.slice(0, 5);
 
-const tagMap = new Map<string, number>();
+// Collect categories
+const catMap = new Map<string, number>();
 for (const note of notes) {
-	for (const tag of note.data.tags) {
-		tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
-	}
+	const cat = note.data.category;
+	catMap.set(cat, (catMap.get(cat) || 0) + 1);
 }
-const allTags = [...tagMap.entries()]
+const categories = [...catMap.entries()]
 	.map(([name, count]) => ({ name, count }))
 	.sort((a, b) => b.count - a.count);
 ---
@@ -129,9 +128,25 @@ const allTags = [...tagMap.entries()]
 			</section>
 
 			<div class="section-title">
-				<h2>热门标签</h2>
+				<h2>分类浏览</h2>
 			</div>
-			<TagCloud tags={allTags.slice(0, 15)} />
+			<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:0.75rem;max-width:640px;margin:0 auto 2rem;">
+				{categories.map((cat) => (
+					<a href={`/notes?category=${encodeURIComponent(cat.name)}`} style="
+						padding: 0.5em 1.2em;
+						background: rgb(var(--gray-light));
+						color: rgb(var(--gray-dark));
+						border-radius: 8px;
+						text-decoration: none;
+						font-weight: 500;
+						font-size: 0.9em;
+						transition: all 0.2s;
+					">
+						{cat.name}
+						<span style="font-size:0.7em;color:rgb(var(--gray));margin-left:0.3em;">{cat.count}</span>
+					</a>
+				))}
+			</div>
 
 			<div class="section-title">
 				<h2>最新笔记</h2>

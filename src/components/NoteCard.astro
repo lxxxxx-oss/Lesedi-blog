@@ -7,10 +7,11 @@ type Props = {
 };
 
 const { note } = Astro.props;
-const { title, description, pubDate, tags } = note.data;
+const { title, description, pubDate, category, tags } = note.data;
 ---
 
 <article class="note-card">
+	<span class="category-badge">{category}</span>
 	<a href={`/notes/${note.id}/`} class="card-link">
 		<h3 class="title">{title}</h3>
 	</a>
@@ -33,6 +34,17 @@ const { title, description, pubDate, tags } = note.data;
 	}
 	.note-card:hover {
 		box-shadow: 0 4px 12px rgba(var(--black), 12%);
+	}
+	.category-badge {
+		display: inline-block;
+		padding: 0.1em 0.5em;
+		font-size: 0.7em;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		background: var(--accent);
+		color: white;
+		border-radius: 4px;
+		margin-bottom: 0.5rem;
 	}
 	.card-link {
 		text-decoration: none;

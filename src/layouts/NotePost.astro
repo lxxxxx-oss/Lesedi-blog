@@ -10,7 +10,7 @@ type Props = CollectionEntry<'notes'>['data'] & {
 	headings: { depth: number; slug: string; text: string }[];
 };
 
-const { title, description, pubDate, tags, headings } = Astro.props;
+const { title, description, pubDate, category, tags, headings } = Astro.props;
 ---
 
 <html lang="zh-CN">
@@ -29,6 +29,22 @@ const { title, description, pubDate, tags, headings } = Astro.props;
 			}
 			.prose {
 				min-width: 0;
+			}
+			.category-badge {
+				display: inline-block;
+				padding: 0.15em 0.6em;
+				font-size: 0.75em;
+				font-weight: 500;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				background: var(--accent);
+				color: white;
+				border-radius: 4px;
+				text-decoration: none;
+				margin-bottom: 0.5rem;
+			}
+			.category-badge:hover {
+				background: var(--accent-dark);
 			}
 			.note-header {
 				margin-bottom: 2rem;
@@ -81,11 +97,14 @@ const { title, description, pubDate, tags, headings } = Astro.props;
 		<article class="note-layout">
 			<div class="prose">
 				<header class="note-header">
+					{category && (
+						<a href={`/notes?category=${encodeURIComponent(category)}`} class="category-badge">{category}</a>
+					)}
 					<h1>{title}</h1>
 					<p class="note-meta"><FormattedDate date={pubDate} /></p>
 					<div class="note-tags">
 						{tags.map((tag) => (
-							<a href={`/notes?tag=${encodeURIComponent(tag)}`}>{tag}</a>
+							<a href={`/notes?category=${encodeURIComponent(category)}&tag=${encodeURIComponent(tag)}`}>{tag}</a>
 						))}
 					</div>
 				</header>

@@ -4,32 +4,39 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import NoteCard from '../../components/NoteCard.astro';
-import TagCloud from '../../components/TagCloud.astro';
 import { SITE_TITLE } from '../../consts';
 
 const allNotes = (await getCollection('notes')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
-// Collect all tags
-const tagMap = new Map<string, number>();
+// Collect categories and their counts + tags
+const catMap = new Map<string, { count: number; tags: Map<string, number> }>();
 for (const note of allNotes) {
+	const cat = note.data.category;
+	if (!catMap.has(cat)) {
+		catMap.set(cat, { count: 0, tags: new Map() });
+	}
+	const entry = catMap.get(cat)!;
+	entry.count++;
 	for (const tag of note.data.tags) {
-		tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
+		entry.tags.set(tag, (entry.tags.get(tag) || 0) + 1);
 	}
 }
-const allTags = [...tagMap.entries()]
-	.map(([name, count]) => ({ name, count }))
-	.sort((a, b) => b.count - a.count);
+
+const categories = [...catMap.entries()].map(([name, data]) => ({
+	name,
+	count: data.count,
+	tags: [...data.tags.entries()].map(([n, c]) => ({ name: n, count: c })),
+}));
 
 const pageTitle = '笔记';
-const pageDescription = `${allNotes.length} 篇笔记，${allTags.length} 个标签`;
 ---
 
 <!doctype html>
 <html lang="zh-CN">
 	<head>
-		<BaseHead title={`${pageTitle} | ${SITE_TITLE}`} description={pageDescription} />
+		<BaseHead title={`${pageTitle} | ${SITE_TITLE}`} description={`${allNotes.length} 篇笔记，${categories.length} 个分类`} />
 		<style>
 			.notes-page {
 				width: 960px;
@@ -38,7 +45,7 @@ const pageDescription = `${allNotes.length} 篇笔记，${allTags.length} 个标
 				padding: 3em 1em;
 			}
 			.notes-header {
-				margin-bottom: 2rem;
+				margin-bottom: 1.5rem;
 				text-align: center;
 			}
 			.notes-header h1 {
@@ -48,43 +55,69 @@ const pageDescription = `${allNotes.length} 篇笔记，${allTags.length} 个标
 				color: rgb(var(--gray));
 				font-size: 1.1em;
 			}
-			.tag-filters {
+			.cat-filters {
 				display: flex;
 				flex-wrap: wrap;
 				justify-content: center;
 				gap: 0.5rem;
-				margin-bottom: 2.5rem;
+				margin-bottom: 1rem;
 			}
-			.tag-filter-btn {
-				padding: 0.3em 0.9em;
-				font-size: 0.85em;
+			.cat-filter-btn {
+				padding: 0.4em 1em;
+				font-size: 0.9em;
 				font-family: inherit;
+				font-weight: 500;
 				background: rgb(var(--gray-light));
 				color: rgb(var(--gray-dark));
 				border: 2px solid transparent;
+				border-radius: 8px;
+				cursor: pointer;
+				transition: all 0.2s;
+			}
+			.cat-filter-btn:hover {
+				border-color: var(--accent);
+				color: var(--accent);
+			}
+			.cat-filter-btn.active {
+				background: var(--accent);
+				color: white;
+				border-color: var(--accent);
+			}
+			.sub-tags {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 0.35rem;
+				margin-bottom: 2rem;
+				padding: 0.75rem;
+				background: rgb(var(--gray-light));
+				border-radius: 8px;
+				min-height: 1em;
+			}
+			.sub-tag-btn {
+				padding: 0.15em 0.65em;
+				font-size: 0.78em;
+				font-family: inherit;
+				background: white;
+				color: rgb(var(--gray-dark));
+				border: 1px solid rgb(var(--gray-light));
 				border-radius: 999px;
 				cursor: pointer;
 				transition: all 0.2s;
 			}
-			.tag-filter-btn:hover {
+			.sub-tag-btn:hover {
 				border-color: var(--accent);
 				color: var(--accent);
 			}
-			.tag-filter-btn.active {
-				background: var(--accent);
+			.sub-tag-btn.active {
+				background: var(--accent-dark);
 				color: white;
-				border-color: var(--accent);
+				border-color: var(--accent-dark);
 			}
 			.notes-grid {
 				display: grid;
 				grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 				gap: 1.5rem;
-			}
-			.no-results {
-				grid-column: 1 / -1;
-				text-align: center;
-				padding: 3rem;
-				color: rgb(var(--gray));
 			}
 		</style>
 	</head>
@@ -93,21 +126,24 @@ const pageDescription = `${allNotes.length} 篇笔记，${allTags.length} 个标
 		<main class="notes-page">
 			<header class="notes-header">
 				<h1>📝 笔记</h1>
-				<p>{pageDescription}</p>
+				<p>{allNotes.length} 篇笔记 · {categories.length} 个分类</p>
 			</header>
 
-			<div class="tag-filters" id="tag-filters">
-				<button class="tag-filter-btn active" data-tag="">全部</button>
-				{allTags.map((t) => (
-					<button class="tag-filter-btn" data-tag={t.name}>
-						{t.name} ({t.count})
+			<span id="cat-data" style="display:none" data-categories={JSON.stringify(categories.map(c => ({ name: c.name, tags: c.tags })))}></span>
+			<div class="cat-filters" id="cat-filters">
+				<button class="cat-filter-btn active" data-cat="">全部</button>
+				{categories.map((cat) => (
+					<button class="cat-filter-btn" data-cat={cat.name}>
+						{cat.name} ({cat.count})
 					</button>
 				))}
 			</div>
 
+			<div class="sub-tags" id="sub-tags"></div>
+
 			<div class="notes-grid" id="notes-grid">
 				{allNotes.map((note) => (
-					<div class="note-item" data-tags={JSON.stringify(note.data.tags)}>
+					<div class="note-item" data-category={note.data.category} data-tags={JSON.stringify(note.data.tags)}>
 						<NoteCard note={note} />
 					</div>
 				))}
@@ -116,35 +152,75 @@ const pageDescription = `${allNotes.length} 篇笔记，${allTags.length} 个标
 		<Footer />
 
 		<script>
-			const filterBtns = document.querySelectorAll('.tag-filter-btn');
+			const CATEGORIES = JSON.parse(document.getElementById('cat-data')!.dataset.categories || '[]');
+			const catBtns = document.querySelectorAll('.cat-filter-btn');
+			const subTagsDiv = document.getElementById('sub-tags')!;
 			const noteItems = document.querySelectorAll('.note-item');
 
 			const params = new URLSearchParams(window.location.search);
-			const activeTag = params.get('tag') || '';
+			const initCat = params.get('category') || '';
+			const initTag = params.get('tag') || '';
 
-			function filterNotes(tag: string) {
-				noteItems.forEach((item) => {
-					const el = item as HTMLElement;
-					const tags = JSON.parse(el.dataset.tags || '[]');
-					el.style.display = !tag || tags.includes(tag) ? '' : 'none';
-				});
-				filterBtns.forEach((btn) => {
-					btn.classList.toggle('active', btn.getAttribute('data-tag') === tag);
-				});
-				const url = new URL(window.location.href);
-				if (tag) {
-					url.searchParams.set('tag', tag);
-				} else {
-					url.searchParams.delete('tag');
+			function getSubTags(catName) {
+				const cat = CATEGORIES.find((c) => c.name === catName);
+				return cat ? cat.tags : [];
+			}
+
+			function renderSubTags(catName, activeTag) {
+				if (!catName) { subTagsDiv.innerHTML = ''; return; }
+				const subTags = getSubTags(catName);
+				let html = `<button class="sub-tag-btn${!activeTag ? ' active' : ''}" data-tag="">全部</button>`;
+				for (const t of subTags) {
+					html += `<button class="sub-tag-btn${t.name === activeTag ? ' active' : ''}" data-tag="${t.name}">${t.name} (${t.count})</button>`;
 				}
+				subTagsDiv.innerHTML = html;
+
+				subTagsDiv.querySelectorAll('.sub-tag-btn').forEach(btn => {
+					btn.addEventListener('click', () => {
+						const tag = btn.getAttribute('data-tag') || '';
+						filterAll(catName, tag);
+						updateUrl(catName, tag);
+					});
+				});
+			}
+
+			function filterAll(cat, tag) {
+				noteItems.forEach((item) => {
+					const el = item;
+					const itemCat = el.dataset.category || '';
+					const itemTags = JSON.parse(el.dataset.tags || '[]');
+
+					let show = true;
+					if (cat && itemCat !== cat) show = false;
+					if (tag && !itemTags.includes(tag)) show = false;
+
+					el.style.display = show ? '' : 'none';
+				});
+
+				catBtns.forEach((btn) => {
+					btn.classList.toggle('active', btn.getAttribute('data-cat') === cat);
+				});
+
+				renderSubTags(cat, tag);
+			}
+
+			function updateUrl(cat, tag) {
+				const url = new URL(window.location.href);
+				if (cat) url.searchParams.set('category', cat);
+				else url.searchParams.delete('category');
+				if (tag) url.searchParams.set('tag', tag);
+				else url.searchParams.delete('tag');
 				window.history.replaceState({}, '', url.toString());
 			}
 
-			filterNotes(activeTag);
+			// Init
+			filterAll(initCat, initTag);
 
-			filterBtns.forEach((btn) => {
+			catBtns.forEach((btn) => {
 				btn.addEventListener('click', () => {
-					filterNotes(btn.getAttribute('data-tag') || '');
+					const cat = btn.getAttribute('data-cat') || '';
+					filterAll(cat, '');
+					updateUrl(cat, '');
 				});
 			});
 		</script>

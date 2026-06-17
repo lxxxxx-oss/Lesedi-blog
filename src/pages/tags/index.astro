@@ -3,32 +3,41 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
-import TagCloud from '../../components/TagCloud.astro';
 import { SITE_TITLE } from '../../consts';
 
 const allNotes = await getCollection('notes');
 
-const tagMap = new Map<string, { count: number; notes: { title: string; slug: string }[] }>();
+// Group notes by category, then by tags within each category
+const catMap = new Map<string, {
+	tags: Map<string, { notes: { title: string; slug: string }[] }>;
+}>();
+
 for (const note of allNotes) {
+	const cat = note.data.category;
+	if (!catMap.has(cat)) {
+		catMap.set(cat, { tags: new Map() });
+	}
+	const entry = catMap.get(cat)!;
 	for (const tag of note.data.tags) {
-		if (!tagMap.has(tag)) {
-			tagMap.set(tag, { count: 0, notes: [] });
+		if (!entry.tags.has(tag)) {
+			entry.tags.set(tag, { notes: [] });
 		}
-		const entry = tagMap.get(tag)!;
-		entry.count++;
-		entry.notes.push({ title: note.data.title, slug: note.id });
+		entry.tags.get(tag)!.notes.push({ title: note.data.title, slug: note.id });
 	}
 }
 
-const allTags = [...tagMap.entries()]
-	.map(([name, data]) => ({ name, ...data }))
-	.sort((a, b) => b.count - a.count);
+const categories = [...catMap.entries()].map(([name, data]) => ({
+	name,
+	tags: [...data.tags.entries()]
+		.map(([tagName, tagData]) => ({ name: tagName, notes: tagData.notes }))
+		.sort((a, b) => b.notes.length - a.notes.length),
+})).sort((a, b) => b.tags.reduce((s, t) => s + t.notes.length, 0) - a.tags.reduce((s, t) => s + t.notes.length, 0));
 ---
 
 <!doctype html>
 <html lang="zh-CN">
 	<head>
-		<BaseHead title={`标签 | ${SITE_TITLE}`} description="按标签浏览所有笔记" />
+		<BaseHead title={`标签 | ${SITE_TITLE}`} description="按分类和标签浏览所有笔记" />
 		<style>
 			.tags-page {
 				width: 960px;
@@ -38,36 +47,57 @@ const allTags = [...tagMap.entries()]
 			}
 			.tags-header {
 				text-align: center;
-				margin-bottom: 2rem;
+				margin-bottom: 2.5rem;
 			}
 			.tags-header h1 {
 				margin-bottom: 0.25rem;
 			}
-			.tag-section {
+			.tags-header p {
+				color: rgb(var(--gray));
+			}
+			.cat-section {
 				margin-bottom: 3rem;
 			}
-			.tag-section h2 {
-				font-size: 1.4em;
-				margin-bottom: 0.5rem;
+			.cat-section h2 {
+				font-size: 1.3em;
+				padding-bottom: 0.3em;
+				border-bottom: 2px solid var(--accent);
+				margin-bottom: 1rem;
 			}
-			.tag-section h2 a {
+			.cat-section h2 .cat-count {
+				font-size: 0.65em;
+				color: rgb(var(--gray));
+				font-weight: normal;
+				margin-left: 0.5em;
+			}
+			.tag-group {
+				margin-bottom: 1.25rem;
+				padding-left: 0.5rem;
+			}
+			.tag-group h3 {
+				font-size: 1em;
+				margin-bottom: 0.3rem;
+				color: var(--accent);
+			}
+			.tag-group h3 a {
 				text-decoration: none;
+				font-weight: 500;
 			}
 			.tag-notes {
 				display: flex;
 				flex-wrap: wrap;
-				gap: 0.3rem 1rem;
+				gap: 0.2rem 1rem;
 				list-style: none;
 				padding: 0;
 				margin: 0;
 			}
 			.tag-notes li::before {
 				content: "·";
-				margin-right: 0.5rem;
+				margin-right: 0.4rem;
 				color: var(--accent);
 			}
 			.tag-notes a {
-				font-size: 0.95em;
+				font-size: 0.9em;
 				color: rgb(var(--gray-dark));
 				text-decoration: none;
 			}
@@ -81,24 +111,31 @@ const allTags = [...tagMap.entries()]
 		<main class="tags-page">
 			<header class="tags-header">
 				<h1>🏷️ 标签</h1>
-				<p>共 {allTags.length} 个标签，{allNotes.length} 篇笔记</p>
+				<p>{categories.length} 个分类 · {allNotes.length} 篇笔记</p>
 			</header>
-			<section class="tag-cloud-section" style="margin-bottom: 2rem;">
-				<TagCloud tags={allTags.map(t => ({ name: t.name, count: t.count }))} />
-			</section>
-			<hr style="margin-bottom: 2rem;" />
-			{allTags.map((tag) => (
-				<section class="tag-section">
+
+			{categories.map((cat) => (
+				<section class="cat-section">
 					<h2>
-						<a href={`/notes?tag=${encodeURIComponent(tag.name)}`}>
-							{tag.name} <span style="font-size:0.7em;color:rgb(var(--gray))">({tag.count})</span>
+						<a href={`/notes?category=${encodeURIComponent(cat.name)}`} style="text-decoration:none;color:rgb(var(--black))">
+							{cat.name}
 						</a>
+						<span class="cat-count">{cat.tags.length} 个标签 · {cat.tags.reduce((s, t) => s + t.notes.length, 0)} 篇</span>
 					</h2>
-					<ul class="tag-notes">
-						{tag.notes.map((n) => (
-							<li><a href={`/notes/${n.slug}/`}>{n.title}</a></li>
-						))}
-					</ul>
+					{cat.tags.map((tag) => (
+						<div class="tag-group">
+							<h3>
+								<a href={`/notes?category=${encodeURIComponent(cat.name)}&tag=${encodeURIComponent(tag.name)}`}>
+									#{tag.name}
+								</a>
+							</h3>
+							<ul class="tag-notes">
+								{tag.notes.map((n) => (
+									<li><a href={`/notes/${n.slug}/`}>{n.title}</a></li>
+								))}
+							</ul>
+						</div>
+					))}
 				</section>
 			))}
 		</main>
