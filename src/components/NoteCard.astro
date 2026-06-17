@@ -6,20 +6,21 @@ type Props = {
 	note: CollectionEntry<'notes'>;
 };
 
+const base = import.meta.env.BASE_URL;
 const { note } = Astro.props;
 const { title, description, pubDate, category, tags } = note.data;
 ---
 
 <article class="note-card">
 	<span class="category-badge">{category}</span>
-	<a href={`/notes/${note.id}/`} class="card-link">
+	<a href={`${base}notes/${note.id}/`} class="card-link">
 		<h3 class="title">{title}</h3>
 	</a>
 	<p class="date"><FormattedDate date={pubDate} /></p>
 	<p class="desc">{description}</p>
 	<div class="tags">
 		{tags.map((tag) => (
-			<a href={`/notes?tag=${encodeURIComponent(tag)}`} class="tag">{tag}</a>
+			<a href={`${base}notes?tag=${encodeURIComponent(tag)}`} class="tag">{tag}</a>
 		))}
 	</div>
 </article>

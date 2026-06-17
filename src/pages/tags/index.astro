@@ -5,6 +5,8 @@ import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import { SITE_TITLE } from '../../consts';
 
+const base = import.meta.env.BASE_URL;
+
 const allNotes = await getCollection('notes');
 
 // Group notes by category, then by tags within each category
@@ -117,7 +119,7 @@ const categories = [...catMap.entries()].map(([name, data]) => ({
 			{categories.map((cat) => (
 				<section class="cat-section">
 					<h2>
-						<a href={`/notes?category=${encodeURIComponent(cat.name)}`} style="text-decoration:none;color:rgb(var(--black))">
+						<a href={`${base}notes?category=${encodeURIComponent(cat.name)}`} style="text-decoration:none;color:rgb(var(--black))">
 							{cat.name}
 						</a>
 						<span class="cat-count">{cat.tags.length} 个标签 · {cat.tags.reduce((s, t) => s + t.notes.length, 0)} 篇</span>
@@ -125,13 +127,13 @@ const categories = [...catMap.entries()].map(([name, data]) => ({
 					{cat.tags.map((tag) => (
 						<div class="tag-group">
 							<h3>
-								<a href={`/notes?category=${encodeURIComponent(cat.name)}&tag=${encodeURIComponent(tag.name)}`}>
+								<a href={`${base}notes?category=${encodeURIComponent(cat.name)}&tag=${encodeURIComponent(tag.name)}`}>
 									#{tag.name}
 								</a>
 							</h3>
 							<ul class="tag-notes">
 								{tag.notes.map((n) => (
-									<li><a href={`/notes/${n.slug}/`}>{n.title}</a></li>
+									<li><a href={`${base}notes/${n.slug}/`}>{n.title}</a></li>
 								))}
 							</ul>
 						</div>

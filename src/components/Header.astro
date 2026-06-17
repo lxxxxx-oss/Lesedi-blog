@@ -5,12 +5,12 @@ import HeaderLink from './HeaderLink.astro';
 
 <header>
 	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
+		<h2><a href={`${import.meta.env.BASE_URL}`}>{SITE_TITLE}</a></h2>
 		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/notes">Notes</HeaderLink>
-			<HeaderLink href="/tags">Tags</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
+			<HeaderLink href={`${import.meta.env.BASE_URL}`}>Home</HeaderLink>
+			<HeaderLink href={`${import.meta.env.BASE_URL}notes`}>Notes</HeaderLink>
+			<HeaderLink href={`${import.meta.env.BASE_URL}tags`}>Tags</HeaderLink>
+			<HeaderLink href={`${import.meta.env.BASE_URL}about`}>About</HeaderLink>
 		</div>
 		<div class="social-links">
 			<a href="https://github.com/lxxxxx-oss" target="_blank">

@@ -10,6 +10,7 @@ type Props = CollectionEntry<'notes'>['data'] & {
 	headings: { depth: number; slug: string; text: string }[];
 };
 
+const base = import.meta.env.BASE_URL;
 const { title, description, pubDate, category, tags, headings } = Astro.props;
 ---
 
@@ -98,13 +99,13 @@ const { title, description, pubDate, category, tags, headings } = Astro.props;
 			<div class="prose">
 				<header class="note-header">
 					{category && (
-						<a href={`/notes?category=${encodeURIComponent(category)}`} class="category-badge">{category}</a>
+						<a href={`${base}notes?category=${encodeURIComponent(category)}`} class="category-badge">{category}</a>
 					)}
 					<h1>{title}</h1>
 					<p class="note-meta"><FormattedDate date={pubDate} /></p>
 					<div class="note-tags">
 						{tags.map((tag) => (
-							<a href={`/notes?category=${encodeURIComponent(category)}&tag=${encodeURIComponent(tag)}`}>{tag}</a>
+							<a href={`${base}notes?category=${encodeURIComponent(category)}&tag=${encodeURIComponent(tag)}`}>{tag}</a>
 						))}
 					</div>
 				</header>
