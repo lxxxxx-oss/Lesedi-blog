@@ -1,48 +1,154 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import TagCloud from '../components/TagCloud.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const notes = (await getCollection('notes')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const latestNotes = notes.slice(0, 5);
+
+const tagMap = new Map<string, number>();
+for (const note of notes) {
+	for (const tag of note.data.tags) {
+		tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
+	}
+}
+const allTags = [...tagMap.entries()]
+	.map(([name, count]) => ({ name, count }))
+	.sort((a, b) => b.count - a.count);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			.home-page {
+				width: 960px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 3em 1em;
+			}
+			.hero {
+				text-align: center;
+				margin-bottom: 3rem;
+			}
+			.hero h1 {
+				margin-bottom: 0.5rem;
+			}
+			.hero p {
+				font-size: 1.15em;
+				color: rgb(var(--gray));
+				max-width: 600px;
+				margin: 0 auto;
+			}
+			.hero-links {
+				margin-top: 1.5rem;
+				display: flex;
+				justify-content: center;
+				gap: 1rem;
+			}
+			.hero-links a {
+				padding: 0.5em 1.5em;
+				background: var(--accent);
+				color: white;
+				border-radius: 8px;
+				text-decoration: none;
+				font-weight: 500;
+				transition: background 0.2s;
+			}
+			.hero-links a:hover {
+				background: var(--accent-dark);
+			}
+			.hero-links a.secondary {
+				background: rgb(var(--gray-light));
+				color: rgb(var(--gray-dark));
+			}
+			.hero-links a.secondary:hover {
+				background: rgb(var(--gray));
+				color: white;
+			}
+			.section-title {
+				text-align: center;
+				margin: 2rem 0 1.5rem;
+			}
+			.section-title h2 {
+				font-size: 1.6em;
+				margin-bottom: 0.25rem;
+			}
+			.section-title a {
+				font-size: 0.9em;
+				color: var(--accent);
+				text-decoration: none;
+			}
+			.latest-list {
+				list-style: none;
+				padding: 0;
+				max-width: 640px;
+				margin: 0 auto;
+			}
+			.latest-list li {
+				padding: 0.75rem 0;
+				border-bottom: 1px solid rgb(var(--gray-light));
+			}
+			.latest-list li:last-child {
+				border-bottom: none;
+			}
+			.latest-list a {
+				font-weight: 500;
+				color: rgb(var(--black));
+				text-decoration: none;
+				font-size: 1.05em;
+			}
+			.latest-list a:hover {
+				color: var(--accent);
+			}
+			.latest-list .meta {
+				font-size: 0.8em;
+				color: rgb(var(--gray));
+				margin-top: 0.15rem;
+			}
+		</style>
 	</head>
 	<body>
 		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
+		<main class="home-page">
+			<section class="hero">
+				<h1>👋 Lesedi's Notes</h1>
+				<p>{SITE_DESCRIPTION}</p>
+				<div class="hero-links">
+					<a href="/notes">📝 浏览笔记</a>
+					<a href="/tags" class="secondary">🏷️ 按标签查看</a>
+				</div>
+			</section>
+
+			<div class="section-title">
+				<h2>热门标签</h2>
+			</div>
+			<TagCloud tags={allTags.slice(0, 15)} />
+
+			<div class="section-title">
+				<h2>最新笔记</h2>
+				<a href="/notes">查看全部 →</a>
+			</div>
+			<ul class="latest-list">
+				{latestNotes.map((note) => (
+					<li>
+						<a href={`/notes/${note.id}/`}>{note.data.title}</a>
+						<div class="meta">
+							<FormattedDate date={note.data.pubDate} />
+							{' · '}
+							{note.data.tags.slice(0, 3).join(', ')}
+						</div>
+					</li>
+				))}
 			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
 		</main>
 		<Footer />
 	</body>

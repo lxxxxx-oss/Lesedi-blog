@@ -1,0 +1,78 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from './FormattedDate.astro';
+
+type Props = {
+	note: CollectionEntry<'notes'>;
+};
+
+const { note } = Astro.props;
+const { title, description, pubDate, tags } = note.data;
+---
+
+<article class="note-card">
+	<a href={`/notes/${note.id}/`} class="card-link">
+		<h3 class="title">{title}</h3>
+	</a>
+	<p class="date"><FormattedDate date={pubDate} /></p>
+	<p class="desc">{description}</p>
+	<div class="tags">
+		{tags.map((tag) => (
+			<a href={`/notes?tag=${encodeURIComponent(tag)}`} class="tag">{tag}</a>
+		))}
+	</div>
+</article>
+
+<style>
+	.note-card {
+		padding: 1.5rem;
+		background: white;
+		border-radius: 8px;
+		box-shadow: 0 1px 3px rgba(var(--black), 8%);
+		transition: box-shadow 0.2s;
+	}
+	.note-card:hover {
+		box-shadow: 0 4px 12px rgba(var(--black), 12%);
+	}
+	.card-link {
+		text-decoration: none;
+	}
+	.title {
+		margin: 0;
+		font-size: 1.25em;
+		color: rgb(var(--black));
+	}
+	.card-link:hover .title {
+		color: var(--accent);
+	}
+	.date {
+		margin: 0.25rem 0 0.5rem;
+		font-size: 0.85em;
+		color: rgb(var(--gray));
+	}
+	.desc {
+		margin: 0 0 0.75rem;
+		font-size: 0.9em;
+		color: rgb(var(--gray-dark));
+		line-height: 1.5;
+	}
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+	}
+	.tag {
+		display: inline-block;
+		padding: 0.15em 0.6em;
+		font-size: 0.75em;
+		background: rgb(var(--gray-light));
+		color: rgb(var(--gray-dark));
+		border-radius: 999px;
+		text-decoration: none;
+		transition: background 0.2s, color 0.2s;
+	}
+	.tag:hover {
+		background: var(--accent);
+		color: white;
+	}
+</style>

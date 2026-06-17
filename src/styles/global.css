@@ -139,3 +139,27 @@ hr {
 	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
 }
+
+/* Note content styles */
+.note-content h2 {
+	margin-top: 2em;
+	padding-bottom: 0.3em;
+	border-bottom: 1px solid rgb(var(--gray-light));
+}
+.note-content h3 {
+	margin-top: 1.5em;
+}
+.note-content table {
+	border-collapse: collapse;
+	margin: 1em 0;
+}
+.note-content th,
+.note-content td {
+	padding: 0.5em 0.75em;
+	border: 1px solid rgb(var(--gray-light));
+	text-align: left;
+}
+.note-content th {
+	background: rgb(var(--gray-light));
+	font-weight: 600;
+}

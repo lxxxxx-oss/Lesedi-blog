@@ -1,0 +1,61 @@
+---
+interface Props {
+	headings: { depth: number; slug: string; text: string }[];
+}
+
+const { headings } = Astro.props;
+---
+
+{
+	headings.length > 1 && (
+		<nav class="toc" aria-labelledby="toc-title">
+			<h2 id="toc-title" class="toc-title">目录</h2>
+			<ul>
+				{headings.map((h) => (
+					<li class={`toc-depth-${h.depth}`}>
+						<a href={`#${h.slug}`}>{h.text}</a>
+					</li>
+				))}
+			</ul>
+		</nav>
+	)
+}
+
+<style>
+	.toc {
+		position: sticky;
+		top: 1rem;
+		padding: 1rem 1.25rem;
+		background: white;
+		border-left: 3px solid var(--accent);
+		border-radius: 0 8px 8px 0;
+		font-size: 0.85em;
+		margin-bottom: 2rem;
+	}
+	.toc-title {
+		font-size: 0.85em;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		margin: 0 0 0.75rem;
+		color: rgb(var(--gray));
+	}
+	.toc ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.toc li {
+		margin-bottom: 0.3rem;
+		line-height: 1.4;
+	}
+	.toc-depth-2 { padding-left: 0; }
+	.toc-depth-3 { padding-left: 1em; }
+	.toc-depth-4 { padding-left: 2em; }
+	.toc a {
+		color: rgb(var(--gray));
+		text-decoration: none;
+	}
+	.toc a:hover {
+		color: var(--accent);
+	}
+</style>

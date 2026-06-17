@@ -1,0 +1,38 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import NotePost from '../../layouts/NotePost.astro';
+
+export async function getStaticPaths() {
+	const notes = await getCollection('notes');
+	return notes.map((note) => ({
+		params: { slug: note.id },
+		props: note,
+	}));
+}
+
+type Props = CollectionEntry<'notes'>;
+
+const note = Astro.props;
+const { Content } = await render(note);
+
+// Extract headings from note body for TOC
+const headings = (note.body || '').split('\n')
+	.filter((line) => /^#{1,4}\s/.test(line))
+	.map((line) => {
+		const match = line.match(/^(#{1,4})\s+(.+)/);
+		if (!match) return null;
+		return {
+			depth: match[1].length,
+			slug: match[2]
+				.toLowerCase()
+				.replace(/[^\w一-鿿\s-]/g, '')
+				.replace(/\s+/g, '-'),
+			text: match[2],
+		};
+	})
+	.filter(Boolean) as { depth: number; slug: string; text: string }[];
+---
+
+<NotePost {...note.data} headings={headings}>
+	<Content />
+</NotePost>

@@ -1,0 +1,107 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import TagCloud from '../../components/TagCloud.astro';
+import { SITE_TITLE } from '../../consts';
+
+const allNotes = await getCollection('notes');
+
+const tagMap = new Map<string, { count: number; notes: { title: string; slug: string }[] }>();
+for (const note of allNotes) {
+	for (const tag of note.data.tags) {
+		if (!tagMap.has(tag)) {
+			tagMap.set(tag, { count: 0, notes: [] });
+		}
+		const entry = tagMap.get(tag)!;
+		entry.count++;
+		entry.notes.push({ title: note.data.title, slug: note.id });
+	}
+}
+
+const allTags = [...tagMap.entries()]
+	.map(([name, data]) => ({ name, ...data }))
+	.sort((a, b) => b.count - a.count);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`标签 | ${SITE_TITLE}`} description="按标签浏览所有笔记" />
+		<style>
+			.tags-page {
+				width: 960px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 3em 1em;
+			}
+			.tags-header {
+				text-align: center;
+				margin-bottom: 2rem;
+			}
+			.tags-header h1 {
+				margin-bottom: 0.25rem;
+			}
+			.tag-section {
+				margin-bottom: 3rem;
+			}
+			.tag-section h2 {
+				font-size: 1.4em;
+				margin-bottom: 0.5rem;
+			}
+			.tag-section h2 a {
+				text-decoration: none;
+			}
+			.tag-notes {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.3rem 1rem;
+				list-style: none;
+				padding: 0;
+				margin: 0;
+			}
+			.tag-notes li::before {
+				content: "·";
+				margin-right: 0.5rem;
+				color: var(--accent);
+			}
+			.tag-notes a {
+				font-size: 0.95em;
+				color: rgb(var(--gray-dark));
+				text-decoration: none;
+			}
+			.tag-notes a:hover {
+				color: var(--accent);
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main class="tags-page">
+			<header class="tags-header">
+				<h1>🏷️ 标签</h1>
+				<p>共 {allTags.length} 个标签，{allNotes.length} 篇笔记</p>
+			</header>
+			<section class="tag-cloud-section" style="margin-bottom: 2rem;">
+				<TagCloud tags={allTags.map(t => ({ name: t.name, count: t.count }))} />
+			</section>
+			<hr style="margin-bottom: 2rem;" />
+			{allTags.map((tag) => (
+				<section class="tag-section">
+					<h2>
+						<a href={`/notes?tag=${encodeURIComponent(tag.name)}`}>
+							{tag.name} <span style="font-size:0.7em;color:rgb(var(--gray))">({tag.count})</span>
+						</a>
+					</h2>
+					<ul class="tag-notes">
+						{tag.notes.map((n) => (
+							<li><a href={`/notes/${n.slug}/`}>{n.title}</a></li>
+						))}
+					</ul>
+				</section>
+			))}
+		</main>
+		<Footer />
+	</body>
+</html>
