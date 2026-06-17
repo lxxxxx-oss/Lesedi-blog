@@ -5,6 +5,7 @@ import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import NoteCard from '../../components/NoteCard.astro';
 import { SITE_TITLE } from '../../consts';
+import BackToTop from '../../components/BackToTop.astro';
 
 const allNotes = (await getCollection('notes')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -143,13 +144,14 @@ const pageTitle = '笔记';
 
 			<div class="notes-grid" id="notes-grid">
 				{allNotes.map((note) => (
-					<div class="note-item" data-category={note.data.category} data-tags={JSON.stringify(note.data.tags)}>
+					<div class="note-item animate-on-scroll" data-category={note.data.category} data-tags={JSON.stringify(note.data.tags)}>
 						<NoteCard note={note} />
 					</div>
 				))}
 			</div>
 		</main>
 		<Footer />
+			<BackToTop />
 
 		<script>
 			const CATEGORIES = JSON.parse(document.getElementById('cat-data')!.dataset.categories || '[]');
@@ -223,6 +225,54 @@ const pageTitle = '笔记';
 					updateUrl(cat, '');
 				});
 			});
+
+			// Reading progress bar
+			(function initProgressBar() {
+				var bar = document.getElementById('reading-progress-bar');
+				if (!bar) {
+					bar = document.createElement('div');
+					bar.id = 'reading-progress-bar';
+					bar.setAttribute('role', 'progressbar');
+					bar.setAttribute('aria-hidden', 'true');
+					document.body.prepend(bar);
+				}
+				var ticking = false;
+				function update() {
+					var scrollTop = window.scrollY;
+					var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+					var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+					bar.style.width = progress + '%';
+				}
+				window.addEventListener('scroll', function() {
+					if (!ticking) {
+						window.requestAnimationFrame(function() { update(); ticking = false; });
+						ticking = true;
+					}
+				}, { passive: true });
+				update();
+			})();
+
+			// Scroll animations for note items
+			(function initScrollAnims() {
+				var items = document.querySelectorAll('.note-item.animate-on-scroll');
+				if ('IntersectionObserver' in window) {
+					var obs = new IntersectionObserver(function(entries) {
+						entries.forEach(function(entry) {
+							if (entry.isIntersecting) {
+								entry.target.classList.add('visible');
+								obs.unobserve(entry.target);
+							}
+						});
+					}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+					items.forEach(function(el, i) {
+						var delay = ((i % 6) * 80) + 'ms';
+						el.style.setProperty('--stagger-delay', delay);
+						obs.observe(el);
+					});
+				} else {
+					items.forEach(function(el) { el.classList.add('visible'); });
+				}
+			})();
 		</script>
 	</body>
 </html>

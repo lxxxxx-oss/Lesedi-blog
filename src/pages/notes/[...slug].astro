@@ -1,6 +1,8 @@
 ---
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import NotePost from '../../layouts/NotePost.astro';
+import BackToTop from '../../components/BackToTop.astro';
+import { estimateReadingTime } from '../../utils/read-time';
 
 export async function getStaticPaths() {
 	const notes = await getCollection('notes');
@@ -14,6 +16,9 @@ type Props = CollectionEntry<'notes'>;
 
 const note = Astro.props;
 const { Content } = await render(note);
+
+// Estimate reading time from raw markdown body
+const readingTime = estimateReadingTime(note.body || '');
 
 // Extract headings from note body for TOC
 const headings = (note.body || '').split('\n')
@@ -33,6 +38,6 @@ const headings = (note.body || '').split('\n')
 	.filter(Boolean) as { depth: number; slug: string; text: string }[];
 ---
 
-<NotePost {...note.data} headings={headings}>
+<NotePost {...note.data} headings={headings} readingTime={readingTime}>
 	<Content />
 </NotePost>

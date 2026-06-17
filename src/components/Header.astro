@@ -1,6 +1,7 @@
 ---
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
+import SearchBar from './SearchBar.astro';
 ---
 
 <header>
@@ -23,14 +24,24 @@ import HeaderLink from './HeaderLink.astro';
 				>
 			</a>
 		</div>
+		<SearchBar />
+		<button id="dark-mode-toggle" class="dark-mode-btn" aria-label="切换暗色模式">
+			<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+		</button>
 	</nav>
 </header>
 <style>
 	header {
 		margin: 0;
 		padding: 0 1em;
-		background: white;
+		background: rgba(255, 255, 255, 0.8);
+		backdrop-filter: blur(12px) saturate(180%);
+		-webkit-backdrop-filter: blur(12px) saturate(180%);
 		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+		position: sticky;
+		top: 0;
+		z-index: 100;
+		transition: background 0.3s ease, box-shadow 0.3s ease;
 	}
 	h2 {
 		margin: 0;
@@ -58,6 +69,20 @@ import HeaderLink from './HeaderLink.astro';
 	.social-links,
 	.social-links a {
 		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+	.dark-mode-btn {
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0.25em;
+		color: rgb(var(--gray-dark));
+		transition: color 0.2s, transform 0.2s;
+		align-items: center;
+	}
+	.dark-mode-btn:hover {
+		transform: scale(1.15);
 	}
 
 	@media (max-width: 720px) {
@@ -72,3 +97,27 @@ import HeaderLink from './HeaderLink.astro';
 		nav a { padding: 0.4em 0.25em; font-size: 0.75em; }
 	}
 </style>
+
+	<script>
+		(() => {
+			const btn = document.getElementById('dark-mode-toggle');
+			if (!btn) return;
+			const html = document.documentElement;
+			const stored = localStorage.getItem('theme');
+			if (stored === 'dark') {
+				html.classList.add('dark');
+			} else if (stored === 'light') {
+				html.classList.remove('dark');
+			}
+			btn.addEventListener('click', () => {
+				const isDark = html.classList.contains('dark');
+				if (isDark) {
+					html.classList.remove('dark');
+					localStorage.setItem('theme', 'light');
+				} else {
+					html.classList.add('dark');
+					localStorage.setItem('theme', 'dark');
+				}
+			});
+		})();
+	</script>

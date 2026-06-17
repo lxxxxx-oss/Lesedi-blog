@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import BackToTop from '../components/BackToTop.astro';
 
 const base = import.meta.env.BASE_URL;
 
@@ -38,6 +39,22 @@ const categories = [...catMap.entries()]
 			.hero {
 				text-align: center;
 				margin-bottom: 3rem;
+				position: relative;
+				overflow: hidden;
+			}
+			.particles-container {
+				position: absolute;
+				inset: 0;
+				top: -2rem;
+				left: 0;
+				width: 100%;
+				height: 200px;
+				pointer-events: none;
+				z-index: 0;
+			}
+			.hero > * {
+				position: relative;
+				z-index: 1;
 			}
 			.hero h1 {
 				margin-bottom: 0.5rem;
@@ -164,7 +181,8 @@ const categories = [...catMap.entries()]
 		<Header />
 		<main class="home-page">
 			<section class="hero">
-				<h1>👋 Lesedi's Notes</h1>
+				<div id="particles-container" class="particles-container"></div>
+				<h1 class="hero-title">👋 Lesedi's Notes</h1>
 				<p>{SITE_DESCRIPTION}</p>
 				<div class="hero-links">
 					<a href={`${base}notes`}>📝 浏览笔记</a>
@@ -201,5 +219,165 @@ const categories = [...catMap.entries()]
 			</ul>
 		</main>
 		<Footer />
+		<BackToTop />
 	</body>
-</html>
+
+		<script>
+			// Reading progress bar
+			(function initProgressBar() {
+				var bar = document.getElementById('reading-progress-bar');
+				if (!bar) {
+					bar = document.createElement('div');
+					bar.id = 'reading-progress-bar';
+					bar.setAttribute('role', 'progressbar');
+					bar.setAttribute('aria-hidden', 'true');
+					document.body.prepend(bar);
+				}
+				var ticking = false;
+				function update() {
+					var scrollTop = window.scrollY;
+					var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+					var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+					bar.style.width = progress + '%';
+				}
+				window.addEventListener('scroll', function() {
+					if (!ticking) {
+						window.requestAnimationFrame(function() { update(); ticking = false; });
+						ticking = true;
+					}
+				}, { passive: true });
+				update();
+			})();
+
+			// Hero title typing animation
+			(function initHeroAnim() {
+				var title = document.querySelector('.hero-title');
+				if (title) title.classList.add('visible');
+			})();
+
+			// Animate category links
+			(function initCatAnims() {
+				var links = document.querySelectorAll('.cat-links a');
+				if ('IntersectionObserver' in window) {
+					var obs = new IntersectionObserver(function(entries) {
+						entries.forEach(function(entry) {
+							if (entry.isIntersecting) {
+								entry.target.classList.add('visible');
+								obs.unobserve(entry.target);
+							}
+						});
+					}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+					links.forEach(function(el, i) {
+						el.classList.add('animate-on-scroll');
+						var delay = ((i % 6) * 80) + 'ms';
+						el.style.setProperty('--stagger-delay', delay);
+						obs.observe(el);
+					});
+				} else {
+					links.forEach(function(el) { el.classList.add('visible'); });
+				}
+			})();
+
+			// Animate latest list items
+			(function initListAnims() {
+				var items = document.querySelectorAll('.latest-list li');
+				if ('IntersectionObserver' in window) {
+					var obs = new IntersectionObserver(function(entries) {
+						entries.forEach(function(entry) {
+							if (entry.isIntersecting) {
+								entry.target.classList.add('visible');
+								obs.unobserve(entry.target);
+							}
+						});
+					}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+					items.forEach(function(el, i) {
+						el.classList.add('animate-on-scroll');
+						var delay = ((i % 6) * 80) + 'ms';
+						el.style.setProperty('--stagger-delay', delay);
+						obs.observe(el);
+					});
+				} else {
+					items.forEach(function(el) { el.classList.add('visible'); });
+				}
+			})();
+
+			// Particle background
+			(function initParticles() {
+				var container = document.getElementById('particles-container');
+				if (!container) return;
+				var canvas = document.createElement('canvas');
+				container.appendChild(canvas);
+				var ctx = canvas.getContext('2d');
+				var particles = [];
+				var count = 40;
+				var w, h;
+
+				function resize() {
+					var rect = container.getBoundingClientRect();
+					w = canvas.width = rect.width;
+					h = canvas.height = rect.height;
+				}
+				resize();
+				window.addEventListener('resize', resize);
+
+				function createParticle() {
+					return {
+						x: Math.random() * w,
+						y: Math.random() * h,
+						r: Math.random() * 2 + 1,
+						dx: (Math.random() - 0.5) * 0.5,
+						dy: (Math.random() - 0.5) * 0.5,
+						opacity: Math.random() * 0.5 + 0.2
+					};
+				}
+
+				for (var i = 0; i < count; i++) {
+					particles.push(createParticle());
+				}
+
+				function draw() {
+					ctx.clearRect(0, 0, w, h);
+					for (var j = 0; j < particles.length; j++) {
+						var p = particles[j];
+						ctx.beginPath();
+						ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+						ctx.fillStyle = 'rgba(35, 55, 255, ' + p.opacity + ')';
+						ctx.fill();
+					}
+					// Draw connections
+					for (var a = 0; a < particles.length; a++) {
+						for (var b = a + 1; b < particles.length; b++) {
+							var dx = particles[a].x - particles[b].x;
+							var dy = particles[a].y - particles[b].y;
+							var dist = Math.sqrt(dx * dx + dy * dy);
+							if (dist < 120) {
+								ctx.beginPath();
+								ctx.moveTo(particles[a].x, particles[a].y);
+								ctx.lineTo(particles[b].x, particles[b].y);
+								ctx.strokeStyle = 'rgba(35, 55, 255, ' + (1 - dist / 120) * 0.15 + ')';
+								ctx.lineWidth = 1;
+								ctx.stroke();
+							}
+						}
+					}
+				}
+
+				function update() {
+					for (var i = 0; i < particles.length; i++) {
+						var p = particles[i];
+						p.x += p.dx;
+						p.y += p.dy;
+						if (p.x < 0 || p.x > w) p.dx *= -1;
+						if (p.y < 0 || p.y > h) p.dy *= -1;
+					}
+				}
+
+				function animate() {
+					update();
+					draw();
+					requestAnimationFrame(animate);
+				}
+				animate();
+			})();
+		</script>
+	</html>

@@ -1,0 +1,251 @@
+---
+---
+
+<div id="search-wrapper" class="search-wrapper">
+	<button id="search-open" class="search-open-btn" aria-label="搜索">
+		<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+		<span class="search-shortcut">⌘K</span>
+	</button>
+
+	<div id="search-overlay" class="search-overlay">
+		<div class="search-modal">
+			<div class="search-input-wrap">
+				<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+				<input id="search-input" type="text" placeholder="搜索笔记..." autocomplete="off" />
+				<button id="search-close" class="search-close-btn" aria-label="关闭">
+					<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+				</button>
+			</div>
+			<div id="search-results" class="search-results"></div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.search-wrapper {
+		position: relative;
+	}
+	.search-open-btn {
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0.25em;
+		color: rgb(var(--gray-dark));
+		transition: color 0.2s, transform 0.2s;
+		display: flex;
+		align-items: center;
+		gap: 0.4em;
+		border-radius: 6px;
+	}
+	.search-open-btn:hover {
+		transform: scale(1.1);
+	}
+	.search-shortcut {
+		font-size: 0.7em;
+		color: rgb(var(--gray));
+		border: 1px solid rgb(var(--gray-light));
+		padding: 0.1em 0.4em;
+		border-radius: 4px;
+		font-family: monospace;
+	}
+	.search-overlay {
+		display: none;
+		position: fixed;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: 1000;
+		justify-content: center;
+		align-items: flex-start;
+		padding-top: 12vh;
+		backdrop-filter: blur(4px);
+	}
+	.search-overlay.active {
+		display: flex;
+	}
+	.search-modal {
+		background: white;
+		border-radius: 12px;
+		width: 90%;
+		max-width: 640px;
+		box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+		overflow: hidden;
+		animation: searchSlideIn 0.2s ease;
+	}
+	@keyframes searchSlideIn {
+		from { opacity: 0; transform: translateY(-20px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+	.search-input-wrap {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 1rem 1.25rem;
+		border-bottom: 1px solid rgb(var(--gray-light));
+	}
+	.search-icon {
+		color: rgb(var(--gray));
+		flex-shrink: 0;
+	}
+	.search-input-wrap input {
+		flex: 1;
+		border: none;
+		outline: none;
+		font-size: 1.1em;
+		font-family: inherit;
+		color: rgb(var(--gray-dark));
+		background: transparent;
+	}
+	.search-close-btn {
+		background: none;
+		border: none;
+		cursor: pointer;
+		color: rgb(var(--gray));
+		padding: 0.25em;
+		border-radius: 4px;
+		transition: color 0.2s;
+	}
+	.search-close-btn:hover {
+		color: rgb(var(--gray-dark));
+	}
+	.search-results {
+		max-height: 60vh;
+		overflow-y: auto;
+		padding: 0.5rem;
+	}
+	.search-results .search-result-item {
+		display: block;
+		padding: 0.75rem 1rem;
+		border-radius: 8px;
+		text-decoration: none;
+		color: rgb(var(--gray-dark));
+		transition: background 0.15s;
+	}
+	.search-results .search-result-item:hover {
+		background: rgb(var(--gray-light));
+	}
+	.search-results .search-result-title {
+		font-weight: 600;
+		font-size: 1em;
+		color: rgb(var(--black));
+		margin-bottom: 0.2rem;
+	}
+	.search-results .search-result-excerpt {
+		font-size: 0.85em;
+		color: rgb(var(--gray));
+		line-height: 1.4;
+	}
+	.search-results mark {
+		background: rgba(35, 55, 255, 0.15);
+		color: var(--accent);
+		border-radius: 2px;
+		padding: 0 2px;
+	}
+	.search-empty {
+		text-align: center;
+		padding: 2rem;
+		color: rgb(var(--gray));
+		font-size: 0.95em;
+	}
+	:root.dark .search-modal {
+		background: #161b22;
+	}
+	:root.dark .search-input-wrap {
+		border-bottom-color: #30363d;
+	}
+	:root.dark .search-input-wrap input {
+		color: #c9d1d9;
+	}
+	:root.dark .search-results .search-result-item:hover {
+		background: #21262d;
+	}
+	:root.dark .search-results .search-result-title {
+		color: #f0f6fc;
+	}
+	:root.dark .search-empty {
+		color: #8b949e;
+	}
+</style>
+
+<script is:inline>
+	(function initSearch() {
+		const wrapper = document.getElementById('search-wrapper');
+		if (!wrapper) return;
+
+		const overlay = document.getElementById('search-overlay');
+		const input = document.getElementById('search-input');
+		const resultsDiv = document.getElementById('search-results');
+		const openBtn = document.getElementById('search-open');
+		const closeBtn = document.getElementById('search-close');
+		let searchInstance = null;
+		let indexLoaded = false;
+
+		async function loadIndex() {
+			if (indexLoaded) return;
+			try {
+				const { pagefind } = await import('pagefind');
+				searchInstance = await pagefind();
+				indexLoaded = true;
+			} catch {
+				// Pagefind index not built yet — show message
+				resultsDiv.innerHTML = '<div class="search-empty">搜索功能尚未就绪，请先构建站点。</div>';
+			}
+		}
+
+		function openSearch() {
+			overlay.classList.add('active');
+			loadIndex();
+			setTimeout(() => input.focus(), 100);
+		}
+
+		function closeSearch() {
+			overlay.classList.remove('active');
+			input.value = '';
+			resultsDiv.innerHTML = '';
+		}
+
+		openBtn.addEventListener('click', openSearch);
+		closeBtn.addEventListener('click', closeSearch);
+		overlay.addEventListener('click', (e) => {
+			if (e.target === overlay) closeSearch();
+		});
+
+		input.addEventListener('input', async (e) => {
+			const query = e.target.value.trim();
+			if (!query || !searchInstance) {
+				resultsDiv.innerHTML = '';
+				return;
+			}
+			const results = await searchInstance.search(query);
+			let html = '';
+			if (results.results.length === 0) {
+				html = '<div class="search-empty">没有找到相关笔记 😢</div>';
+			} else {
+				for (const r of results.results.slice(0, 10)) {
+					const data = r.data;
+					const excerpt = data.excerpt || '';
+					const highlighted = data.highlight || '';
+					html += `<a href="${data.url}" class="search-result-item">
+						<div class="search-result-title">${data.title || 'Untitled'}</div>
+						<div class="search-result-excerpt">${highlighted || excerpt}</div>
+					</a>`;
+				}
+			}
+			resultsDiv.innerHTML = html;
+		});
+
+		// Keyboard shortcut: Cmd/Ctrl + K
+		document.addEventListener('keydown', (e) => {
+			if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+				e.preventDefault();
+				if (overlay.classList.contains('active')) {
+					closeSearch();
+				} else {
+					openSearch();
+				}
+			}
+			if (e.key === 'Escape' && overlay.classList.contains('active')) {
+				closeSearch();
+			}
+		});
+	})();
+</script>

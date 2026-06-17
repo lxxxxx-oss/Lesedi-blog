@@ -9,6 +9,13 @@ export default defineConfig({
 	site: 'https://lxxxxx-oss.github.io',
 	base: '/Lesedi-blog/',
 	integrations: [mdx(), sitemap()],
+	outDir: 'dist',
+	markdown: {
+		shikiConfig: {
+			themes: { light: 'github-light', dark: 'github-dark' },
+			wrap: true,
+		},
+	},
 	fonts: [
 		{
 			provider: fontProviders.local(),

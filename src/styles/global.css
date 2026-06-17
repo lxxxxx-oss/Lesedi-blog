@@ -16,6 +16,38 @@
 		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
 		0 16px 32px rgba(var(--gray), 33%);
 }
+/* ============================================
+   Dark Mode Variables
+   ============================================ */
+:root.dark {
+	--accent: #58a6ff;
+	--accent-dark: #79b8ff;
+	--black: 240, 246, 252;
+	--gray: 139, 148, 158;
+	--gray-light: 30, 36, 44;
+	--gray-dark: 201, 209, 217;
+	--gray-gradient: rgba(var(--gray-light), 50%), #0d1117;
+	--box-shadow:
+		0 2px 6px rgba(0, 0, 0, 40%), 0 8px 24px rgba(0, 0, 0, 50%),
+		0 16px 32px rgba(0, 0, 0, 50%);
+}
+
+/* Auto-detect system preference */
+@media (prefers-color-scheme: dark) {
+	:root:not(.light) {
+		--accent: #58a6ff;
+		--accent-dark: #79b8ff;
+		--black: 240, 246, 252;
+		--gray: 139, 148, 158;
+		--gray-light: 30, 36, 44;
+		--gray-dark: 201, 209, 217;
+		--gray-gradient: rgba(var(--gray-light), 50%), #0d1117;
+		--box-shadow:
+			0 2px 6px rgba(0, 0, 0, 40%), 0 8px 24px rgba(0, 0, 0, 50%),
+			0 16px 32px rgba(0, 0, 0, 50%);
+	}
+}
+
 body {
 	font-family: var(--font-atkinson);
 	margin: 0;
@@ -28,6 +60,12 @@ body {
 	color: rgb(var(--gray-dark));
 	font-size: 20px;
 	line-height: 1.7;
+	transition: background 0.3s ease, color 0.3s ease;
+}
+
+:root.dark body {
+	background: linear-gradient(rgba(30, 36, 44, 50%), #0d1117) no-repeat;
+	background-size: 100% 600px;
 }
 main {
 	width: 720px;
@@ -58,7 +96,13 @@ a {
 	color: var(--accent);
 }
 a:hover {
-	color: var(--accent);
+	color: var(--accent-dark);
+}
+a.gradient-text {
+	background: linear-gradient(135deg, var(--accent), #0066ff, #00ccff);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
 }
 p {
 	margin-bottom: 1em;
@@ -98,10 +142,61 @@ blockquote {
 	padding: 0 0 0 20px;
 	margin: 0;
 	font-size: 1.333em;
+	background: linear-gradient(90deg, rgba(35, 55, 255, 0.05), transparent);
+	border-radius: 0 8px 8px 0;
 }
 hr {
 	border: none;
 	border-top: 1px solid rgb(var(--gray-light));
+}
+
+/* Dark mode: header, footer, cards, prose */
+:root.dark header,
+header {
+	transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+:root.dark header {
+	background: rgba(22, 27, 34, 0.85);
+	backdrop-filter: blur(12px) saturate(180%);
+	-webkit-backdrop-filter: blur(12px) saturate(180%);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 30%);
+}
+
+:root.dark footer {
+	transition: background 0.3s ease;
+}
+
+:root.dark .note-card,
+:root.dark article {
+	background: #161b22;
+	transition: background 0.3s ease;
+}
+
+:root.dark .note-card:hover {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 40%);
+}
+
+:root.dark .prose,
+:root.dark .note-content {
+	transition: background 0.3s ease;
+}
+
+:root.dark table,
+:root.dark .note-content table {
+	transition: background 0.3s ease;
+}
+
+:root.dark th,
+:root.dark td {
+	transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+:root.dark th {
+	background: rgba(30, 36, 44, 0.8);
+}
+
+:root.dark .note-content h2 {
+	border-bottom-color: rgb(var(--gray-light));
 }
 
 /* Tablet */
@@ -151,6 +246,14 @@ hr {
 .note-content h3 {
 	margin-top: 1.5em;
 }
+
+/* Gradient accent elements */
+.gradient-bg {
+	background: linear-gradient(135deg, #2337ff, #0066ff, #00ccff);
+}
+.gradient-border {
+	border-image: linear-gradient(135deg, #2337ff, #00ccff) 1;
+}
 .note-content table {
 	border-collapse: collapse;
 	margin: 1em 0;
@@ -166,4 +269,119 @@ hr {
 .note-content th {
 	background: rgb(var(--gray-light));
 	font-weight: 600;
+}
+
+/* ============================================
+   Dark mode: code blocks, inline code
+   ============================================ */
+:root.dark code {
+	background: rgb(var(--gray-light));
+}
+:root.dark pre {
+	background: #161b22;
+	border: 1px solid #30363d;
+}
+:root.dark .note-content table {
+	background: #0d1117;
+}
+
+/* ============================================
+   Shiki code highlighting overrides
+   ============================================ */
+.prose pre {
+	background: #f6f8fa;
+	border: 1px solid #d0d7de;
+}
+:root.dark .prose pre {
+	background: #0d1117;
+	border-color: #30363d;
+}
+.prose code {
+	padding: 2px 6px;
+	background-color: rgba(175, 184, 193, 0.2);
+	border-radius: 6px;
+	font-size: 0.88em;
+}
+:root.dark .prose code {
+	background-color: rgba(30, 36, 44, 0.8);
+}
+
+/* ============================================
+   Scroll animations
+   ============================================ */
+.animate-on-scroll {
+	opacity: 0;
+	transform: translateY(24px);
+	transition: opacity 0.5s ease var(--stagger-delay, 0ms),
+		transform 0.5s ease var(--stagger-delay, 0ms);
+	will-change: opacity, transform;
+}
+.animate-on-scroll.visible {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+/* Hero typing animation */
+@keyframes typing {
+	from { width: 0; }
+	to { width: 100%; }
+}
+@keyframes blink-caret {
+	50% { border-color: transparent; }
+}
+.hero-title {
+	display: inline-block;
+	overflow: hidden;
+	white-space: nowrap;
+	border-right: 3px solid var(--accent);
+	animation: typing 2s steps(18) 0.3s forwards, blink-caret 0.6s step-end infinite;
+	width: 0;
+}
+.hero-title.visible {
+	animation: typing 2s steps(18) 0.3s forwards, blink-caret 0.6s step-end 3.5s;
+}
+
+/* ============================================
+   Reading progress bar
+   ============================================ */
+#reading-progress-bar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 0%;
+	height: 3px;
+	background: linear-gradient(90deg, #2337ff, #0066ff, #00ccff);
+	z-index: 999;
+	transition: width 0.1s linear;
+}
+
+/* ============================================
+   Custom scrollbar
+   ============================================ */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+::-webkit-scrollbar-thumb {
+	background: rgba(var(--gray), 0.3);
+	border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(var(--gray), 0.5);
+}
+:root.dark ::-webkit-scrollbar-thumb {
+	background: rgba(139, 148, 158, 0.4);
+}
+:root.dark ::-webkit-scrollbar-thumb:hover {
+	background: rgba(139, 148, 158, 0.6);
+}
+* {
+	scrollbar-width: thin;
+	scrollbar-color: rgba(var(--gray), 0.3) transparent;
+}
+:root.dark * {
+	scrollbar-color: rgba(139, 148, 158, 0.4) transparent;
 }
