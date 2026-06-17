@@ -41,6 +41,26 @@ const categories = [...catMap.entries()]
 				margin-bottom: 3rem;
 				position: relative;
 				overflow: hidden;
+				border-radius: 24px;
+				padding: 4rem 1.5rem 3rem;
+				background: linear-gradient(135deg, rgba(35, 55, 255, 0.04), rgba(0, 204, 255, 0.04));
+			}
+			:root.dark .hero {
+				background: linear-gradient(135deg, rgba(88, 166, 255, 0.06), rgba(165, 214, 255, 0.03));
+			}
+			.hero-gradient-bg {
+				position: absolute;
+				inset: -20%;
+				background: linear-gradient(-45deg, #2337ff, #0066ff, #00ccff, #00ff88, #2337ff);
+				background-size: 400% 400%;
+				animation: gradientShift 20s ease infinite;
+				opacity: 0.12;
+				z-index: 0;
+				filter: blur(60px);
+			}
+			:root.dark .hero-gradient-bg {
+				opacity: 0.08;
+				background: linear-gradient(-45deg, #58a6ff, #79b8ff, #a5d6ff, #3fb950, #58a6ff);
 			}
 			.particles-container {
 				position: absolute;
@@ -50,47 +70,36 @@ const categories = [...catMap.entries()]
 				width: 100%;
 				height: 200px;
 				pointer-events: none;
-				z-index: 0;
+				z-index: 1;
 			}
 			.hero > * {
 				position: relative;
-				z-index: 1;
+				z-index: 2;
+			}
+			.hero-subtitle {
+				font-size: 0.75em;
+				letter-spacing: 0.15em;
+				text-transform: uppercase;
+				color: rgb(var(--gray));
+				margin-bottom: 0.5rem;
+				font-weight: 500;
 			}
 			.hero h1 {
-				margin-bottom: 0.5rem;
+				margin-bottom: 0.75rem;
 			}
-			.hero p {
-				font-size: 1.15em;
+			.hero-desc {
+				font-size: 1.1em;
 				color: rgb(var(--gray));
-				max-width: 600px;
-				margin: 0 auto;
+				max-width: 500px;
+				margin: 0 auto 1.5rem;
+				line-height: 1.6;
 			}
 			.hero-links {
-				margin-top: 1.5rem;
+				margin-top: 0;
 				display: flex;
 				justify-content: center;
 				gap: 1rem;
 				flex-wrap: wrap;
-			}
-			.hero-links a {
-				padding: 0.5em 1.5em;
-				background: var(--accent);
-				color: white;
-				border-radius: 8px;
-				text-decoration: none;
-				font-weight: 500;
-				transition: background 0.2s;
-			}
-			.hero-links a:hover {
-				background: var(--accent-dark);
-			}
-			.hero-links a.secondary {
-				background: rgb(var(--gray-light));
-				color: rgb(var(--gray-dark));
-			}
-			.hero-links a.secondary:hover {
-				background: rgb(var(--gray));
-				color: white;
 			}
 			.cat-links {
 				display: flex;
@@ -157,20 +166,21 @@ const categories = [...catMap.entries()]
 
 			@media (max-width: 720px) {
 				.home-page { padding: 2em 0.75em; }
-				.hero { margin-bottom: 2rem; }
+				.hero { margin-bottom: 2rem; padding: 3rem 1rem 2rem; }
 				.hero h1 { font-size: 1.8em; }
-				.hero p { font-size: 1em; }
+				.hero-desc { font-size: 1em; }
 				.hero-links { gap: 0.5rem; }
-				.hero-links a { padding: 0.4em 1em; font-size: 0.9em; }
+				.hero-cta { padding: 0.5em 1.2em; font-size: 0.9em; }
 				.cat-links { gap: 0.4rem; }
 				.cat-links a { padding: 0.35em 0.8em; font-size: 0.8em; }
 				.section-title h2 { font-size: 1.3em; }
 			}
 			@media (max-width: 480px) {
 				.home-page { padding: 1.5em 0.5em; }
-				.hero h1 { font-size: 1.4em; }
-				.hero p { font-size: 0.9em; margin-bottom: 0; }
-				.hero-links a { padding: 0.35em 0.8em; font-size: 0.85em; }
+				.hero { padding: 2rem 0.75rem 1.5rem; }
+				.hero h1 { font-size: 1.5em; }
+				.hero-desc { font-size: 0.9em; margin-bottom: 1rem; }
+				.hero-cta { padding: 0.45em 1em; font-size: 0.85em; }
 				.section-title { margin: 1.5rem 0 1rem; }
 				.section-title h2 { font-size: 1.15em; }
 				.latest-list a { font-size: 0.95em; }
@@ -181,12 +191,14 @@ const categories = [...catMap.entries()]
 		<Header />
 		<main class="home-page">
 			<section class="hero">
+				<div class="hero-gradient-bg"></div>
 				<div id="particles-container" class="particles-container"></div>
-				<h1 class="hero-title">👋 Lesedi's Notes</h1>
-				<p>{SITE_DESCRIPTION}</p>
+				<p class="hero-subtitle hero-fade-1">PERSONAL NOTES AND LEARNING JOURNAL</p>
+				<h1 class="hero-title gradient-heading hero-fade-2">👋 Lesedi's Notes</h1>
+				<p class="hero-desc hero-fade-3">{SITE_DESCRIPTION}</p>
 				<div class="hero-links">
-					<a href={`${base}notes`}>📝 浏览笔记</a>
-					<a href={`${base}tags`} class="secondary">🏷️ 按标签查看</a>
+					<a href={`${base}notes`} class="hero-cta primary hero-fade-4">📝 浏览笔记</a>
+					<a href={`${base}tags`} class="hero-cta secondary hero-fade-5">🏷️ 按标签查看</a>
 				</div>
 			</section>
 
@@ -222,38 +234,23 @@ const categories = [...catMap.entries()]
 		<BackToTop />
 	</body>
 
-		<script>
-			// Reading progress bar
-			(function initProgressBar() {
-				var bar = document.getElementById('reading-progress-bar');
-				if (!bar) {
-					bar = document.createElement('div');
-					bar.id = 'reading-progress-bar';
-					bar.setAttribute('role', 'progressbar');
-					bar.setAttribute('aria-hidden', 'true');
-					document.body.prepend(bar);
-				}
-				var ticking = false;
-				function update() {
-					var scrollTop = window.scrollY;
-					var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-					var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-					bar.style.width = progress + '%';
-				}
-				window.addEventListener('scroll', function() {
-					if (!ticking) {
-						window.requestAnimationFrame(function() { update(); ticking = false; });
-						ticking = true;
-					}
-				}, { passive: true });
-				update();
+		<script is:inline>
+			// Custom cursor
+			(function initCursor() {
+				var isTouch = window.matchMedia('(pointer: coarse)').matches;
+				if (isTouch) return;
+				var cursor = document.createElement('div');
+				cursor.id = 'custom-cursor';
+				cursor.setAttribute('aria-hidden', 'true');
+				document.body.appendChild(cursor);
+				var mouseX = 0, mouseY = 0, cx = 0, cy = 0, hovering = false;
+				document.addEventListener('mousemove', function(e) { mouseX = e.clientX; mouseY = e.clientY; });
+				document.addEventListener('mouseover', function(e) { if (e.target.closest('a,button,.note-card')) { hovering = true; cursor.classList.add('hovering'); } });
+				document.addEventListener('mouseout', function(e) { if (e.target.closest('a,button,.note-card')) { hovering = false; cursor.classList.remove('hovering'); } });
+				(function animate() { cx += (mouseX - cx) * 0.15; cy += (mouseY - cy) * 0.15; cursor.style.transform = 'translate3d(' + (cx - 12) + 'px,' + (cy - 12) + 'px,0)'; requestAnimationFrame(animate); })();
 			})();
 
-			// Hero title typing animation
-			(function initHeroAnim() {
-				var title = document.querySelector('.hero-title');
-				if (title) title.classList.add('visible');
-			})();
+			// Hero fade-up is handled by CSS keyframes (no JS needed)
 
 			// Animate category links
 			(function initCatAnims() {
@@ -299,6 +296,43 @@ const categories = [...catMap.entries()]
 				} else {
 					items.forEach(function(el) { el.classList.add('visible'); });
 				}
+			})();
+
+			// Magnetic buttons for hero CTAs
+			(function initMagnetic() {
+				var isTouch = window.matchMedia('(pointer: coarse)').matches;
+				if (isTouch) return;
+				var btns = document.querySelectorAll('.hero-cta');
+				btns.forEach(function(btn) {
+					var strength = 0.3;
+					var radius = 80;
+					var tx = 0, ty = 0, cx = 0, cy = 0, rafId = 0;
+					btn.addEventListener('mousemove', function(e) {
+						var rect = btn.getBoundingClientRect();
+						var mx = e.clientX - (rect.left + rect.width / 2);
+						var my = e.clientY - (rect.top + rect.height / 2);
+						var dist = Math.sqrt(mx * mx + my * my);
+						tx = dist < radius ? mx * strength : 0;
+						ty = dist < radius ? my * strength : 0;
+					});
+					function animate() {
+						cx += (tx - cx) * 0.1;
+						cy += (ty - cy) * 0.1;
+						btn.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
+						if (Math.abs(tx - cx) > 0.1 || Math.abs(ty - cy) > 0.1) {
+							rafId = requestAnimationFrame(animate);
+						}
+					}
+					btn.addEventListener('mouseenter', function() {
+						if (rafId) cancelAnimationFrame(rafId);
+						animate();
+					});
+					btn.addEventListener('mouseleave', function() {
+						if (rafId) cancelAnimationFrame(rafId);
+						rafId = 0; tx = 0; ty = 0; cx = 0; cy = 0;
+						btn.style.transform = '';
+					});
+				});
 			})();
 
 			// Particle background

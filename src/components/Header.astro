@@ -5,119 +5,186 @@ import SearchBar from './SearchBar.astro';
 ---
 
 <header>
-	<nav>
-		<h2><a href={`${import.meta.env.BASE_URL}`}>{SITE_TITLE}</a></h2>
-		<div class="internal-links">
+	<div class="floating-nav" id="floating-nav">
+		<div class="nav-left">
+			<h2><a href={`${import.meta.env.BASE_URL}`}>{SITE_TITLE}</a></h2>
+		</div>
+		<div class="nav-center">
 			<HeaderLink href={`${import.meta.env.BASE_URL}`}>Home</HeaderLink>
 			<HeaderLink href={`${import.meta.env.BASE_URL}notes`}>Notes</HeaderLink>
 			<HeaderLink href={`${import.meta.env.BASE_URL}tags`}>Tags</HeaderLink>
 			<HeaderLink href={`${import.meta.env.BASE_URL}about`}>About</HeaderLink>
 		</div>
-		<div class="social-links">
-			<a href="https://github.com/lxxxxx-oss" target="_blank">
-				<span class="sr-only">GitHub</span>
-				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
-					><path
-						fill="currentColor"
-						d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
-					></path></svg
-				>
+		<div class="nav-right">
+			<SearchBar />
+			<button id="dark-mode-toggle" class="dark-mode-btn" aria-label="切换暗色模式">
+				<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+			</button>
+			<a href="https://github.com/lxxxxx-oss" target="_blank" class="social-icon" aria-label="GitHub">
+				<svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"
+					><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></path></svg>
 			</a>
 		</div>
-		<SearchBar />
-		<button id="dark-mode-toggle" class="dark-mode-btn" aria-label="切换暗色模式">
-			<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-		</button>
-	</nav>
+	</div>
 </header>
 <style>
 	header {
 		margin: 0;
-		padding: 0 1em;
-		background: rgba(255, 255, 255, 0.8);
-		backdrop-filter: blur(12px) saturate(180%);
-		-webkit-backdrop-filter: blur(12px) saturate(180%);
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
-		position: sticky;
-		top: 0;
-		z-index: 100;
-		transition: background 0.3s ease, box-shadow 0.3s ease;
+		padding: 1em 0 0;
 	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
-	}
-	nav {
+	.floating-nav {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		gap: 1.25rem;
+		padding: 0.6em 1.5em;
+		background: rgba(255, 255, 255, 0.75);
+		backdrop-filter: blur(16px) saturate(200%);
+		-webkit-backdrop-filter: blur(16px) saturate(200%);
+		border-radius: 100px;
+		box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+		position: sticky;
+		top: 0.75rem;
+		z-index: 100;
+		transition: padding 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+		max-width: 900px;
+		margin: auto;
 	}
-	nav a {
-		padding: 1em 0.5em;
-		color: var(--black);
-		border-bottom: 4px solid transparent;
+	.floating-nav.scrolled {
+		padding: 0.4em 1.2em;
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+	}
+	.nav-left h2 {
+		margin: 0;
+		font-size: 0.95em;
+	}
+	.nav-left a,
+	.nav-left a.active {
 		text-decoration: none;
+		color: rgb(var(--black));
 	}
-	nav a.active {
+	.nav-center {
+		display: flex;
+		gap: 0.25rem;
+		align-items: center;
+	}
+	.nav-center a {
+		padding: 0.4em 0.6em;
+		color: rgb(var(--gray-dark));
 		text-decoration: none;
-		border-bottom-color: var(--accent);
+		font-size: 0.88em;
+		border-radius: 8px;
+		transition: color 0.2s, background 0.2s;
 	}
-	.social-links,
-	.social-links a {
+	.nav-center a:hover {
+		color: var(--accent);
+		background: rgba(35, 55, 255, 0.05);
+	}
+	.nav-center a.active {
+		color: var(--accent);
+		font-weight: 600;
+	}
+	.nav-right {
 		display: flex;
 		align-items: center;
-		gap: 0.75rem;
+		gap: 0.5rem;
 	}
 	.dark-mode-btn {
 		background: none;
 		border: none;
 		cursor: pointer;
-		padding: 0.25em;
+		padding: 0.2em;
 		color: rgb(var(--gray-dark));
 		transition: color 0.2s, transform 0.2s;
-		align-items: center;
 	}
 	.dark-mode-btn:hover {
 		transform: scale(1.15);
 	}
+	.social-icon {
+		color: rgb(var(--gray));
+		transition: color 0.2s;
+		text-decoration: none;
+	}
+	.social-icon:hover {
+		color: rgb(var(--gray-dark));
+	}
+	:root.dark .floating-nav {
+		background: rgba(22, 27, 34, 0.8);
+		box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+	}
+	:root.dark .floating-nav.scrolled {
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+	}
+	:root.dark .nav-center a {
+		color: #8b949e;
+	}
+	:root.dark .nav-center a:hover {
+		color: #58a6ff;
+		background: rgba(88, 166, 255, 0.08);
+	}
+	:root.dark .nav-left a,
+	:root.dark .nav-left a.active {
+		color: #f0f6fc;
+	}
 
 	@media (max-width: 720px) {
-		.social-links { display: none; }
-		nav { flex-wrap: wrap; }
-		nav a { padding: 0.5em 0.35em; font-size: 0.85em; }
+		.floating-nav {
+			gap: 0.5rem;
+			padding: 0.5em 1em;
+			border-radius: 16px;
+		}
+		.nav-center {
+			display: none;
+		}
+		.nav-left h2 {
+			font-size: 0.85em;
+		}
 	}
 	@media (max-width: 480px) {
-		header { padding: 0 0.5em; }
-		h2 { width: 100%; text-align: center; margin-bottom: 0.25em; font-size: 0.9em; }
-		.internal-links { width: 100%; justify-content: center; display: flex; }
-		nav a { padding: 0.4em 0.25em; font-size: 0.75em; }
+		header { padding: 0.5em 0 0; }
+		.floating-nav {
+			gap: 0.35rem;
+			padding: 0.4em 0.75em;
+		}
+		.nav-left h2 { font-size: 0.75em; }
 	}
 </style>
 
-	<script>
-		(() => {
-			const btn = document.getElementById('dark-mode-toggle');
-			if (!btn) return;
-			const html = document.documentElement;
-			const stored = localStorage.getItem('theme');
-			if (stored === 'dark') {
-				html.classList.add('dark');
-			} else if (stored === 'light') {
+<script>
+	(() => {
+		const btn = document.getElementById('dark-mode-toggle');
+		if (!btn) return;
+		const html = document.documentElement;
+		const stored = localStorage.getItem('theme');
+		if (stored === 'dark') {
+			html.classList.add('dark');
+		} else if (stored === 'light') {
+			html.classList.remove('dark');
+		}
+		btn.addEventListener('click', () => {
+			const isDark = html.classList.contains('dark');
+			if (isDark) {
 				html.classList.remove('dark');
+				localStorage.setItem('theme', 'light');
+			} else {
+				html.classList.add('dark');
+				localStorage.setItem('theme', 'dark');
 			}
-			btn.addEventListener('click', () => {
-				const isDark = html.classList.contains('dark');
-				if (isDark) {
-					html.classList.remove('dark');
-					localStorage.setItem('theme', 'light');
-				} else {
-					html.classList.add('dark');
-					localStorage.setItem('theme', 'dark');
+		});
+
+		// Floating nav scroll shrink
+		const nav = document.getElementById('floating-nav');
+		if (nav) {
+			let ticking = false;
+			window.addEventListener('scroll', () => {
+				if (!ticking) {
+					window.requestAnimationFrame(() => {
+						nav.classList.toggle('scrolled', window.scrollY > 60);
+						ticking = false;
+					});
+					ticking = true;
 				}
-			});
-		})();
-	</script>
+			}, { passive: true });
+		}
+	})();
+</script>

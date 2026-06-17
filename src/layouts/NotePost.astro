@@ -103,7 +103,7 @@ const { title, description, pubDate, category, tags, headings, readingTime } = A
 					{category && (
 						<a href={`${base}notes?category=${encodeURIComponent(category)}`} class="category-badge">{category}</a>
 					)}
-					<h1>{title}</h1>
+					<h1 class="gradient-heading">{title}</h1>
 					<p class="note-meta">
 						<FormattedDate date={pubDate} />
 						{readingTime && (
@@ -132,7 +132,23 @@ const { title, description, pubDate, category, tags, headings, readingTime } = A
 		<Footer />
 			<BackToTop />
 	</body>
-</html>
+
+		<script is:inline>
+			(function initCursor() {
+				var isTouch = window.matchMedia('(pointer: coarse)').matches;
+				if (isTouch) return;
+				var cursor = document.createElement('div');
+				cursor.id = 'custom-cursor';
+				cursor.setAttribute('aria-hidden', 'true');
+				document.body.appendChild(cursor);
+				var mouseX = 0, mouseY = 0, cx = 0, cy = 0, hovering = false;
+				document.addEventListener('mousemove', function(e) { mouseX = e.clientX; mouseY = e.clientY; });
+				document.addEventListener('mouseover', function(e) { if (e.target.closest('a,button,.note-card')) { hovering = true; cursor.classList.add('hovering'); } });
+				document.addEventListener('mouseout', function(e) { if (e.target.closest('a,button,.note-card')) { hovering = false; cursor.classList.remove('hovering'); } });
+				(function animate() { cx += (mouseX - cx) * 0.15; cy += (mouseY - cy) * 0.15; cursor.style.transform = 'translate3d(' + (cx - 12) + 'px,' + (cy - 12) + 'px,0)'; requestAnimationFrame(animate); })();
+			})();
+		</script>
+	</html>
 
 <style>
 	@media (max-width: 720px) {

@@ -321,25 +321,7 @@ header {
 	transform: translateY(0);
 }
 
-/* Hero typing animation */
-@keyframes typing {
-	from { width: 0; }
-	to { width: 100%; }
-}
-@keyframes blink-caret {
-	50% { border-color: transparent; }
-}
-.hero-title {
-	display: inline-block;
-	overflow: hidden;
-	white-space: nowrap;
-	border-right: 3px solid var(--accent);
-	animation: typing 2s steps(18) 0.3s forwards, blink-caret 0.6s step-end infinite;
-	width: 0;
-}
-.hero-title.visible {
-	animation: typing 2s steps(18) 0.3s forwards, blink-caret 0.6s step-end 3.5s;
-}
+/* Hero fade-up animations (replaces typing animation) */
 
 /* ============================================
    Reading progress bar
@@ -384,4 +366,196 @@ header {
 }
 :root.dark * {
 	scrollbar-color: rgba(139, 148, 158, 0.4) transparent;
+}
+
+/* ============================================
+   Gradient text headings
+   ============================================ */
+.gradient-heading {
+	background: linear-gradient(135deg, #2337ff, #0066ff, #00ccff);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	display: inline-block;
+}
+:root.dark .gradient-heading {
+	background: linear-gradient(135deg, #58a6ff, #79b8ff, #a5d6ff);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+/* ============================================
+   Page fade-in animation
+   ============================================ */
+@keyframes pageIn {
+	from { opacity: 0; transform: translateY(12px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+main {
+	animation: pageIn 0.4s ease forwards;
+}
+
+/* ============================================
+   Custom cursor
+   ============================================ */
+#custom-cursor {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 24px;
+	height: 24px;
+	border: 2px solid rgba(35, 55, 255, 0.7);
+	border-radius: 50%;
+	pointer-events: none;
+	z-index: 10000;
+	transition: width 0.2s, height 0.2s, border-color 0.2s, background 0.2s;
+	will-change: transform;
+	mix-blend-mode: difference;
+}
+#custom-cursor.hovering {
+	width: 48px;
+	height: 48px;
+	border-color: rgba(35, 55, 255, 0.4);
+	background: rgba(35, 55, 255, 0.1);
+}
+:root.dark #custom-cursor {
+	border-color: rgba(88, 166, 255, 0.7);
+}
+:root.dark #custom-cursor.hovering {
+	border-color: rgba(88, 166, 255, 0.4);
+	background: rgba(88, 166, 255, 0.1);
+}
+
+/* ============================================
+   Velocity skew for scroll effects
+   ============================================ */
+.velocity-skew {
+	transition: transform 0.15s ease-out;
+	will-change: transform;
+}
+
+/* ============================================
+   Floating nav pill
+   ============================================ */
+.floating-nav {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1.5rem;
+	padding: 0.6em 1.5em;
+	background: rgba(255, 255, 255, 0.75);
+	backdrop-filter: blur(16px) saturate(200%);
+	-webkit-backdrop-filter: blur(16px) saturate(200%);
+	border-radius: 100px;
+	box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+	transition: padding 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+.floating-nav.scrolled {
+	padding: 0.4em 1.2em;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+:root.dark .floating-nav {
+	background: rgba(22, 27, 34, 0.8);
+	box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+:root.dark .floating-nav.scrolled {
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   Hero gradient animation
+   ============================================ */
+@keyframes gradientShift {
+	0% { background-position: 0% 50%; }
+	25% { background-position: 100% 50%; }
+	50% { background-position: 100% 100%; }
+	75% { background-position: 0% 100%; }
+	100% { background-position: 0% 50%; }
+}
+.hero-gradient-bg {
+	position: absolute;
+	inset: -20%;
+	background: linear-gradient(-45deg, #2337ff, #0066ff, #00ccff, #00ff88, #2337ff);
+	background-size: 400% 400%;
+	animation: gradientShift 20s ease infinite;
+	opacity: 0.12;
+	z-index: 0;
+	filter: blur(60px);
+}
+:root.dark .hero-gradient-bg {
+	opacity: 0.08;
+	background: linear-gradient(-45deg, #58a6ff, #79b8ff, #a5d6ff, #3fb950, #58a6ff);
+}
+
+/* ============================================
+   Hero fade-up animations
+   ============================================ */
+@keyframes fadeUp {
+	from { opacity: 0; transform: translateY(30px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+.hero-fade-1 { animation: fadeUp 0.7s ease 0.1s both; }
+.hero-fade-2 { animation: fadeUp 0.7s ease 0.25s both; }
+.hero-fade-3 { animation: fadeUp 0.7s ease 0.4s both; }
+.hero-fade-4 { animation: fadeUp 0.7s ease 0.55s both; }
+.hero-fade-5 { animation: fadeUp 0.7s ease 0.7s both; }
+
+/* ============================================
+   Hero CTA buttons
+   ============================================ */
+.hero-cta {
+	display: inline-block;
+	padding: 0.6em 1.8em;
+	border-radius: 100px;
+	text-decoration: none;
+	font-weight: 500;
+	font-size: 0.95em;
+	transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.hero-cta.primary {
+	background: linear-gradient(135deg, #2337ff, #0066ff);
+	color: white;
+	box-shadow: 0 4px 16px rgba(35, 55, 255, 0.3);
+}
+.hero-cta.primary:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 24px rgba(35, 55, 255, 0.4);
+}
+.hero-cta.secondary {
+	background: white;
+	color: rgb(var(--gray-dark));
+	border: 1px solid rgb(var(--gray-light));
+}
+:root.dark .hero-cta.secondary {
+	background: #161b22;
+	color: #c9d1d9;
+	border-color: #30363d;
+}
+.hero-cta.secondary:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+:root.dark .hero-cta.primary {
+	background: linear-gradient(135deg, #58a6ff, #79b8ff);
+	box-shadow: 0 4px 16px rgba(88, 166, 255, 0.3);
+}
+
+/* ============================================
+   Lenis smooth scroll CSS reset
+   ============================================ */
+html.lenis, html.lenis body {
+	height: auto;
+}
+.lenis.lenis-smooth {
+	scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+	overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+	overflow: hidden;
+}
+.lenis.lenis-scrolling iframe {
+	pointer-events: none;
 }
